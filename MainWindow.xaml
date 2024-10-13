@@ -3,10 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
         xmlns:local="clr-namespace:ReversibleTuringMachine"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
+        <Style TargetType="{x:Type TextBlock}" x:Key="hyperlink">
+            <Setter Property="Foreground" Value="Blue" />
+            <Setter Property="TextDecorations" Value="Underline" />
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
         <Style TargetType="{x:Type TextBox}" x:Key="selectedFitaSlot">
             <Setter Property="BorderThickness" Value="3" />
             <Setter Property="BorderBrush" Value="Red" />
@@ -71,7 +77,7 @@
             <!-- fita input -->
             <StackPanel Grid.Row="1" Orientation="Horizontal"
                         x:Name="inputStackPanel"
-                        HorizontalAlignment="Center" Style="{DynamicResource fitaStackPanel}">
+                        HorizontalAlignment="Center" Style="{StaticResource fitaStackPanel}">
                 <!-- essas textbox vao ser geradas em runtime-->
                 <TextBox Text="a"/>
                 <TextBox Text="a"/>
@@ -88,7 +94,7 @@
             <!-- fita historico -->
             <StackPanel Grid.Row="2" Orientation="Horizontal"
                         x:Name="historyStackPanel"
-                        HorizontalAlignment="Center" Style="{DynamicResource fitaStackPanel}">
+                        HorizontalAlignment="Center" Style="{StaticResource fitaStackPanel}">
                 <!-- essas textbox vao ser geradas em runtime-->
                 <TextBox Text="a"/>
                 <TextBox Text="a"/>
@@ -121,8 +127,19 @@
         </Grid>
         
         <!-- bottom text -->
-        <Label Grid.Row="1" Grid.ColumnSpan="2"
-               Content="Made with &lt;3 by Pedro Henrique Ramos, Rafael Carneiro e Rodrigo Appelt"
-               HorizontalContentAlignment="Center"/>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2"
+                    Orientation="Horizontal" HorizontalAlignment="Center">
+            <emoji:TextBlock Grid.Row="1" Grid.ColumnSpan="2"
+                             Text="Made with ❤ by "
+                             HorizontalAlignment="Center"/>
+            <TextBlock Text="Pedro Henrique Ramos" Style="{StaticResource hyperlink}"
+                       MouseUp="PedroProfileClick"/>
+            <TextBlock Text=", "/>
+            <TextBlock Text="Rafael Carneiro" Style="{StaticResource hyperlink}"
+                       MouseUp="PregoProfileClick"/>
+            <TextBlock Text=" e "/>
+            <TextBlock Text="Rodrigo Appelt" Style="{StaticResource hyperlink}"
+                       MouseUp="RodrigoProfileClick"/>
+        </StackPanel>
     </Grid>
 </Window>

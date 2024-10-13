@@ -14,8 +14,23 @@ namespace ReversibleTuringMachine {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+
         public MainWindow() {
             InitializeComponent();
         }
+
+#pragma warning disable S1075
+        private void PedroProfileClick(object sender, MouseButtonEventArgs e) {
+            Utils.OpenBrowser("https://github.com/PedroRamos360");
+        }
+
+        private void PregoProfileClick(object sender, MouseButtonEventArgs e) {
+            Utils.OpenBrowser("https://github.com/Pre9o");
+        }
+
+        private void RodrigoProfileClick(object sender, MouseButtonEventArgs e) {
+            Utils.OpenBrowser("https://github.com/Agentew04");
+        }
+#pragma warning restore S1075
     }
 }
