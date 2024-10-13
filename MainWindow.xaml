@@ -6,7 +6,123 @@
         xmlns:local="clr-namespace:ReversibleTuringMachine"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBox}" x:Key="selectedFitaSlot">
+            <Setter Property="BorderThickness" Value="3" />
+            <Setter Property="BorderBrush" Value="Red" />
+        </Style>
+        <Style TargetType="{x:Type StackPanel}" x:Key="fitaStackPanel">
+            <Style.Resources>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Margin" Value="5,0,5,0" />
+                    <Setter Property="Width" Value="25" />
+                    <Setter Property="Height" Value="25" />
+                    <Setter Property="TextAlignment" Value="Center" />
+                    <Setter Property="IsReadOnly" Value="True" />
+                </Style>
+            </Style.Resources>
+        </Style>
+    </Window.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        
+        <!-- Historio de undos -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="Histórico de UNDOs"/>
+            <ListView Grid.Row="1" Margin="5">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
 
+        <!-- Visao principal da maquina -->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" /> <!-- para titulos e info misc-->
+                <RowDefinition Height="1*" /> <!-- fita de input -->
+                <RowDefinition Height="1*" /> <!-- fita de historico -->
+                <RowDefinition Height="1*" /> <!-- fita de output -->
+            </Grid.RowDefinitions>
+            
+            <!-- Top bar -->
+            <StackPanel Grid.Row="0" Margin="5">
+                <StackPanel Orientation="Horizontal" Margin="3,0,3,0">
+                    <Label Content="Estado Atual: "/>
+                    <TextBox x:Name="currentStateTextbox"
+                             MinWidth="25"/>
+                </StackPanel>
+                <!-- mais informacoes na top bar adicionar aqui-->
+            </StackPanel>
+
+            <!-- fita input -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal"
+                        x:Name="inputStackPanel"
+                        HorizontalAlignment="Center" Style="{DynamicResource fitaStackPanel}">
+                <!-- essas textbox vao ser geradas em runtime-->
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+                <!-- em runtime, calcula a textbox do meio e aplica esse 
+                     efeito. vai simbolizar onde a cabeca esta localizada-->
+                <TextBox Text="a" BorderBrush="Red" BorderThickness="3"/>
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+            </StackPanel>
+            
+            <!-- fita historico -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal"
+                        x:Name="historyStackPanel"
+                        HorizontalAlignment="Center" Style="{DynamicResource fitaStackPanel}">
+                <!-- essas textbox vao ser geradas em runtime-->
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+                <!-- em runtime, calcula a textbox do meio e aplica esse 
+                     efeito. vai simbolizar onde a cabeca esta localizada-->
+                <TextBox Text="a" BorderBrush="Red" BorderThickness="3"/>
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+            </StackPanel>
+
+            <!-- fita output -->
+            <StackPanel Grid.Row="3" Orientation="Horizontal"
+                        x:Name="outputStackPanel"
+                        HorizontalAlignment="Center" Style="{DynamicResource fitaStackPanel}">
+                <!-- essas textbox vao ser geradas em runtime-->
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+                <!-- em runtime, calcula a textbox do meio e aplica esse 
+                    efeito. vai simbolizar onde a cabeca esta localizada-->
+                <TextBox Text="a" BorderBrush="Red" BorderThickness="3"/>
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+                <TextBox Text="a"/>
+            </StackPanel>
+        </Grid>
+        
+        <!-- bottom text -->
+        <Label Grid.Row="1" Grid.ColumnSpan="2"
+               Content="Made with &lt;3 by Pedro Henrique Ramos, Rafael Carneiro e Rodrigo Appelt"
+               HorizontalContentAlignment="Center"/>
     </Grid>
 </Window>
