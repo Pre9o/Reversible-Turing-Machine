@@ -1,0 +1,20 @@
+Primeira linha:
+6: número de estados
+2: número de símbolos da fita
+5: número total de transições
+17: comprimento total da string de input
+
+Segunda linha:
+1: estado inicial
+2,3,4,5: estados intermediários
+6: estado de aceitação
+
+Terceira linha:
+0 1: símbolos de leitura e escrita que a máquina de turing pode fazer
+
+Quarta linha:
+0 1 $ X B: alfabeto da máquina, símbolos que podem ser usados na fita
+
+Resto:
+Funções de transição:
+(current_state, current_symbol) = (next_state, symbol_to_write, direction).
