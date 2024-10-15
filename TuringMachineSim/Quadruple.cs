@@ -1,20 +1,20 @@
 public class Quadruple
 {
-    public int CurrentState { get; set; }
-    public char ReadSymbol { get; set; }
-    public char WriteSymbol { get; set; }
-    public int NextState { get; set; }
+    public string First { get; set; }
+    public string Second { get; set; }
+    public string Third { get; set; }
+    public string Fourth { get; set; }
 
-    public Quadruple(int currentState, char readSymbol, char writeSymbol, int nextState)
+    public Quadruple(string first, string second, string third, string fourth)
     {
-        CurrentState = currentState;
-        ReadSymbol = readSymbol;
-        WriteSymbol = writeSymbol;
-        NextState = nextState;
+        First = first;
+        Second = second;
+        Third = third;
+        Fourth = fourth;
     }
 
     public override string ToString()
     {
-        return $"({CurrentState}, {ReadSymbol}) -> ({NextState}, {WriteSymbol})";
+        return $"({First}, {Second}, {Third}, {Fourth})";
     }
 }

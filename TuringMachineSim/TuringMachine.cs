@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-// Código do gpt
+// Código do gpt desisti de entender e decidi fazer de outro jeito
 class TuringMachine
 {
     private List<char> inputTape;
@@ -102,10 +102,10 @@ class TuringMachine
         Console.WriteLine($"Output Tape: {string.Join("", outputTape)}");
     }
 
-    public static void Main(string[] args)
-    {
-        var tm = new TuringMachine("entrada_quintupla.txt");
-        tm.Run();
-        tm.PrintTapes();
-    }
+    // public static void Main(string[] args)
+    // {
+    //     var tm = new TuringMachine("entrada_quintupla.txt");
+    //     tm.Run();
+    //     tm.PrintTapes();
+    // }
 }
