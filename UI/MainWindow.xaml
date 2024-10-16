@@ -28,6 +28,10 @@
                 </Style>
             </Style.Resources>
         </Style>
+        <Style TargetType="{x:Type TextBlock}" x:Key="hyperlink">
+            <Setter Property="Foreground" Value="Blue" />
+            <Setter Property="TextDecorations" Value="Underline" />
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -65,16 +69,22 @@
             </Grid.RowDefinitions>
             
             <!-- Top bar -->
-            <StackPanel Grid.Row="0" Margin="5">
-                <StackPanel Orientation="Horizontal" Margin="3,0,3,0">
+            <StackPanel Grid.Row="0" Margin="5" Orientation="Horizontal">
+                <Button Margin="5" Content="Open File" Padding="5,3"
+                        Click="OpenTuringFile"/>
+                <StackPanel Orientation="Horizontal" Margin="3,0,3,0"
+                            VerticalAlignment="Center">
                     <Label Content="Estado Atual: "/>
                     <TextBox x:Name="currentStateTextbox"
-                             MinWidth="25"/>
+                             MinWidth="25" VerticalContentAlignment="Center"
+                             IsReadOnly="True"/>
                 </StackPanel>
                 <!-- mais informacoes na top bar adicionar aqui-->
             </StackPanel>
 
             <!-- fita input -->
+            <TextBlock Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"
+                       Text="Fita Input" Margin="5" FontSize="15"/>
             <StackPanel Grid.Row="1" Orientation="Horizontal"
                         x:Name="inputStackPanel"
                         HorizontalAlignment="Center" Style="{StaticResource fitaStackPanel}">
@@ -92,6 +102,8 @@
             </StackPanel>
             
             <!-- fita historico -->
+            <TextBlock Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center"
+           Text="Fita History" Margin="5" FontSize="15"/>
             <StackPanel Grid.Row="2" Orientation="Horizontal"
                         x:Name="historyStackPanel"
                         HorizontalAlignment="Center" Style="{StaticResource fitaStackPanel}">
@@ -109,6 +121,8 @@
             </StackPanel>
 
             <!-- fita output -->
+            <TextBlock Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                       Text="Fita Output" Margin="5" FontSize="15"/>
             <StackPanel Grid.Row="3" Orientation="Horizontal"
                         x:Name="outputStackPanel"
                         HorizontalAlignment="Center" Style="{DynamicResource fitaStackPanel}">
@@ -128,18 +142,17 @@
         
         <!-- bottom text -->
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2"
-                    Orientation="Horizontal" HorizontalAlignment="Center">
-            <emoji:TextBlock Grid.Row="1" Grid.ColumnSpan="2"
-                             Text="Made with ❤ by "
-                             HorizontalAlignment="Center"/>
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <emoji:TextBlock Text="Made with ❤️ by "/>
             <TextBlock Text="Pedro Henrique Ramos" Style="{StaticResource hyperlink}"
-                       MouseUp="PedroProfileClick"/>
+                       MouseUp="OpenPedroProfile" Cursor="Hand"/>
             <TextBlock Text=", "/>
-            <TextBlock Text="Rafael Carneiro" Style="{StaticResource hyperlink}"
-                       MouseUp="PregoProfileClick"/>
+            <TextBlock Text="Rafael Carneiro Pregardier" Style="{StaticResource hyperlink}"
+                       MouseUp="OpenPregoProfile" Cursor="Hand"/>
             <TextBlock Text=" e "/>
             <TextBlock Text="Rodrigo Appelt" Style="{StaticResource hyperlink}"
-                       MouseUp="RodrigoProfileClick"/>
+                       MouseUp="OpenRodrigoProfile" Cursor="Hand"/>
         </StackPanel>
     </Grid>
 </Window>
