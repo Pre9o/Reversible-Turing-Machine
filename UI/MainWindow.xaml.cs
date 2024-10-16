@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,7 +46,9 @@ namespace ReversibleTuringMachine {
 
             if (dialog.ShowDialog() == true) {
                 string path = dialog.FileName;
-                string content = System.IO.File.ReadAllText(path);
+                using FileStream fs = File.OpenRead(path);
+                using StreamReader sr = new(fs);
+                TuringMachine tm = TuringMachine.FromStreamAsync(sr).Result;
             }
         }
     }
