@@ -17,8 +17,32 @@ namespace ReversibleTuringMachine {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        private List<TextBox> inputTapeBoxes = [];
+        private List<TextBox> historyTapeBoxes = [];
+        private List<TextBox> outputTapeBoxes = [];
+        private int inputHeadPosition = 0;
+        private int historyHeadPosition = 0;
+        private int outputHeadPosition = 0;
+
+
         public MainWindow() {
             InitializeComponent();
+
+            CreateTapes(inputStackPanel, historyTapeBoxes);
+            CreateTapes(historyStackPanel, historyTapeBoxes);
+            CreateTapes(outputStackPanel, historyTapeBoxes);
+        }
+
+        private void CreateTapes(StackPanel parent, List<TextBox> boxList) {
+            int boxCount = 9;
+            for(int i = 0; i < boxCount; i++) {
+                TextBox tb = new();
+                if (i == 0) {
+                    tb.BorderThickness = new(3);
+                    tb.BorderBrush = Brushes.Red;
+                }
+                parent.Children.Add(tb);
+            }
         }
 
         private void OpenUrl(string url) {
@@ -40,7 +64,7 @@ namespace ReversibleTuringMachine {
             OpenUrl("https://github.com/Agentew04");
         }
 
-        private void OpenTuringFile(object sender, RoutedEventArgs e) {
+        private async void OpenTuringFile(object sender, RoutedEventArgs e) {
             OpenFileDialog dialog = new();
             dialog.DefaultExt = ".txt";
 
@@ -48,7 +72,7 @@ namespace ReversibleTuringMachine {
                 string path = dialog.FileName;
                 using FileStream fs = File.OpenRead(path);
                 using StreamReader sr = new(fs);
-                TuringMachine tm = TuringMachine.FromStreamAsync(sr).Result;
+                TuringMachine tm = await TuringMachine.FromStreamAsync(sr);
             }
         }
     }

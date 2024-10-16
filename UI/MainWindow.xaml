@@ -28,10 +28,6 @@
                 </Style>
             </Style.Resources>
         </Style>
-        <Style TargetType="{x:Type TextBlock}" x:Key="hyperlink">
-            <Setter Property="Foreground" Value="Blue" />
-            <Setter Property="TextDecorations" Value="Underline" />
-        </Style>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -49,7 +45,9 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Content="Histórico de UNDOs"/>
+            <Label Grid.Row="0" Content="Histórico de Operações"
+                   HorizontalAlignment="Center"
+                   FontSize="18"/>
             <ListView Grid.Row="1" Margin="5">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -89,16 +87,6 @@
                         x:Name="inputStackPanel"
                         HorizontalAlignment="Center" Style="{StaticResource fitaStackPanel}">
                 <!-- essas textbox vao ser geradas em runtime-->
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
-                <!-- em runtime, calcula a textbox do meio e aplica esse 
-                     efeito. vai simbolizar onde a cabeca esta localizada-->
-                <TextBox Text="a" BorderBrush="Red" BorderThickness="3"/>
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
             </StackPanel>
             
             <!-- fita historico -->
@@ -108,16 +96,6 @@
                         x:Name="historyStackPanel"
                         HorizontalAlignment="Center" Style="{StaticResource fitaStackPanel}">
                 <!-- essas textbox vao ser geradas em runtime-->
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
-                <!-- em runtime, calcula a textbox do meio e aplica esse 
-                     efeito. vai simbolizar onde a cabeca esta localizada-->
-                <TextBox Text="a" BorderBrush="Red" BorderThickness="3"/>
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
             </StackPanel>
 
             <!-- fita output -->
@@ -127,32 +105,22 @@
                         x:Name="outputStackPanel"
                         HorizontalAlignment="Center" Style="{DynamicResource fitaStackPanel}">
                 <!-- essas textbox vao ser geradas em runtime-->
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
-                <!-- em runtime, calcula a textbox do meio e aplica esse 
-                    efeito. vai simbolizar onde a cabeca esta localizada-->
-                <TextBox Text="a" BorderBrush="Red" BorderThickness="3"/>
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
-                <TextBox Text="a"/>
             </StackPanel>
         </Grid>
         
         <!-- bottom text -->
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2"
-                    Orientation="Horizontal"
+                    Orientation="Horizontal" Margin="0,0,0,3"
                     HorizontalAlignment="Center">
             <emoji:TextBlock Text="Made with ❤️ by "/>
             <TextBlock Text="Pedro Henrique Ramos" Style="{StaticResource hyperlink}"
-                       MouseUp="OpenPedroProfile" Cursor="Hand"/>
+                       MouseUp="OpenPedroProfile"/>
             <TextBlock Text=", "/>
             <TextBlock Text="Rafael Carneiro Pregardier" Style="{StaticResource hyperlink}"
-                       MouseUp="OpenPregoProfile" Cursor="Hand"/>
+                       MouseUp="OpenPregoProfile"/>
             <TextBlock Text=" e "/>
             <TextBlock Text="Rodrigo Appelt" Style="{StaticResource hyperlink}"
-                       MouseUp="OpenRodrigoProfile" Cursor="Hand"/>
+                       MouseUp="OpenRodrigoProfile"/>
         </StackPanel>
     </Grid>
 </Window>

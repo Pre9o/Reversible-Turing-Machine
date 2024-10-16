@@ -9,10 +9,12 @@ public partial class TuringMachine
     private List<char> historyTape = [];
     private List<char> outputTape = [];
 
+    private List<char> inputAlphabet = [];
+    private List<char> tapeAlphabet = [];
     private List<Quintuple> transitions = new();
-    private List<int> 
-    private int currentState;
-    private int finalState;
+    private List<int> states = [];
+    private int currentState = -1;
+    private int finalState = -1;
 
     public static async Task<TuringMachine> FromStreamAsync(StreamReader sr) {
         var tm = new TuringMachine();
@@ -27,16 +29,33 @@ public partial class TuringMachine
         int numTransitions = int.Parse(config[3]);
 
         string? f2 = await sr.ReadLineAsync() ?? throw new Exception("Could not read line 2");
-        var states = f2.Split(' ').Select(int.Parse).ToList();
-        int initialState = states.First();
-        int finalState = states.Last();
-        List<int> intermediateStates = states.Skip(1).Take(states.Count - 2).ToList();
+        var statesRead = f2.Split(' ').Select(int.Parse).ToList();
+        if (statesRead.Count != numStates) {
+            throw new Exception($"Invalid number of states. Expected {numStates}. Got {statesRead.Count}!");
+        }
+        tm.states = statesRead.ToList();
+        tm.currentState = tm.states.First();
+        tm.finalState = tm.states.Last();
 
         string? f3 = await sr.ReadLineAsync() ?? throw new Exception("Could not read line 3");
-        List<char> inputAlphabet = f3.Split(' ').Select(char.Parse).ToList();
+        List<char> starterAlphabet = f3.Split(' ')
+            .Where(x => x.Length > 0)
+            .Select(x => x[0])
+            .ToList();
+        if(starterAlphabet.Count != numAlphaInput) {
+            throw new Exception($"Invalid number of input alphabet symbols. Expected {numAlphaInput}. Got {starterAlphabet.Count}!");
+        }
+        tm.inputAlphabet = starterAlphabet;
 
         string? f4 = await sr.ReadLineAsync() ?? throw new Exception("Could not read line 4");
-        List<char> machineAlphabet = f4.Split(' ').Select(char.Parse).ToList();
+        List<char> machineAlphabet = f4.Split(' ')
+            .Where(x => x.Length>0)
+            .Select(x => x[0])
+            .ToList();
+        if (machineAlphabet.Count != numAlphaTape) {
+            throw new Exception($"Invalid number of machine alphabet symbols. Expected {numAlphaTape}. Got {machineAlphabet.Count}!");
+        }
+        tm.tapeAlphabet = machineAlphabet;
 
         List<Quintuple> quints = [];
         for(int i = 0; i < numTransitions; i++) {
@@ -46,7 +65,7 @@ public partial class TuringMachine
             Direction direction = m.Groups["dir"].Value switch {
                 "L" => Direction.L,
                 "R" => Direction.R,
-                _ => throw new Exception("Invalid direction")
+                _ => throw new Exception($"Invalid direction. Expected 'L' or 'R'. Got: '{m.Groups["dir"].Value}'")
             };
             Quintuple quint = new(
                 currentState: int.Parse(m.Groups["a0"].Value), 
@@ -56,6 +75,9 @@ public partial class TuringMachine
                 direction);
             quints.Add(quint);
         }
+
+        var input = await sr.ReadLineAsync() ?? throw new Exception("Could not read input");
+        tm.inputTape = input.ToList();
         return tm;
     }
 
@@ -67,14 +89,13 @@ public partial class TuringMachine
         {
             char currentSymbol = inputTape[tapePosition];
 
-            if (transitions.TryGetValue((currentState, currentSymbol), out var transition))
+            Quintuple? trans = transitions.Find(x => x.CurrentState == currentState && x.ReadSymbol == currentSymbol);
+            if (trans is not null)
             {
-                var (newState, writeSymbol, move) = transition;
+                inputTape[tapePosition] = trans.WriteSymbol;
+                currentState = trans.NextState;
 
-                inputTape[tapePosition] = writeSymbol;
-                currentState = newState;
-
-                tapePosition += (move == 'R') ? 1 : -1;
+                tapePosition += trans.MoveDirection == Direction.R ? 1 : -1;
 
                 if (tapePosition >= inputTape.Count) inputTape.Add('B');
                 if (tapePosition < 0) { inputTape.Insert(0, 'B'); tapePosition = 0; }
@@ -98,6 +119,6 @@ public partial class TuringMachine
         Console.WriteLine($"Output Tape: {string.Join("", outputTape)}");
     }
 
-    [GeneratedRegex(@"\((?<a0>\d+),(?<b0>\w+)\)=\((?<a1>\d+),(?<b1>\w+),(?<dir>[LR])\)")]
+    [GeneratedRegex(@"\((?<a0>\d+),(?<b0>.+)\)=\((?<a1>\d+),(?<b1>.+),(?<dir>[LR])\)")]
     private static partial Regex TransitionRegex();
 }
