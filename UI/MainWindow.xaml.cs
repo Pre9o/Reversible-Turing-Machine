@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.Win32;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,6 +37,16 @@ namespace ReversibleTuringMachine {
 
         private void OpenRodrigoProfile(object sender, MouseButtonEventArgs e) {
             OpenUrl("https://github.com/Agentew04");
+        }
+
+        private void OpenTuringFile(object sender, RoutedEventArgs e) {
+            OpenFileDialog dialog = new();
+            dialog.DefaultExt = ".txt";
+
+            if (dialog.ShowDialog() == true) {
+                string path = dialog.FileName;
+                string content = System.IO.File.ReadAllText(path);
+            }
         }
     }
 }

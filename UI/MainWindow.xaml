@@ -64,16 +64,22 @@
             </Grid.RowDefinitions>
             
             <!-- Top bar -->
-            <StackPanel Grid.Row="0" Margin="5">
-                <StackPanel Orientation="Horizontal" Margin="3,0,3,0">
+            <StackPanel Grid.Row="0" Margin="5" Orientation="Horizontal">
+                <Button Margin="5" Content="Open File" Padding="5,3"
+                        Click="OpenTuringFile"/>
+                <StackPanel Orientation="Horizontal" Margin="3,0,3,0"
+                            VerticalAlignment="Center">
                     <Label Content="Estado Atual: "/>
                     <TextBox x:Name="currentStateTextbox"
-                             MinWidth="25"/>
+                             MinWidth="25" VerticalContentAlignment="Center"
+                             IsReadOnly="True"/>
                 </StackPanel>
                 <!-- mais informacoes na top bar adicionar aqui-->
             </StackPanel>
 
             <!-- fita input -->
+            <TextBlock Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"
+                       Text="Fita Input" Margin="5" FontSize="15"/>
             <StackPanel Grid.Row="1" Orientation="Horizontal"
                         x:Name="inputStackPanel"
                         HorizontalAlignment="Center" Style="{DynamicResource fitaStackPanel}">
@@ -91,6 +97,8 @@
             </StackPanel>
             
             <!-- fita historico -->
+            <TextBlock Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center"
+           Text="Fita History" Margin="5" FontSize="15"/>
             <StackPanel Grid.Row="2" Orientation="Horizontal"
                         x:Name="historyStackPanel"
                         HorizontalAlignment="Center" Style="{DynamicResource fitaStackPanel}">
@@ -108,6 +116,8 @@
             </StackPanel>
 
             <!-- fita output -->
+            <TextBlock Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                       Text="Fita Output" Margin="5" FontSize="15"/>
             <StackPanel Grid.Row="3" Orientation="Horizontal"
                         x:Name="outputStackPanel"
                         HorizontalAlignment="Center" Style="{DynamicResource fitaStackPanel}">
@@ -131,13 +141,13 @@
                     HorizontalAlignment="Center">
             <emoji:TextBlock Text="Made with ❤️ by "/>
             <TextBlock Text="Pedro Henrique Ramos" Style="{StaticResource hyperlink}"
-                       MouseUp="OpenPedroProfile"/>
+                       MouseUp="OpenPedroProfile" Cursor="Hand"/>
             <TextBlock Text=", "/>
             <TextBlock Text="Rafael Carneiro Pregardier" Style="{StaticResource hyperlink}"
-                       MouseUp="OpenPregoProfile"/>
+                       MouseUp="OpenPregoProfile" Cursor="Hand"/>
             <TextBlock Text=" e "/>
             <TextBlock Text="Rodrigo Appelt" Style="{StaticResource hyperlink}"
-                       MouseUp="OpenRodrigoProfile"/>
+                       MouseUp="OpenRodrigoProfile" Cursor="Hand"/>
         </StackPanel>
     </Grid>
 </Window>

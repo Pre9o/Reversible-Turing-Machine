@@ -1,8 +1,8 @@
 Primeira linha:
 6: número de estados
-2: número de símbolos da fita
-5: número total de transições
-17: comprimento total da string de input
+2: número de símbolos do alfabeto de entrda
+5: número de simbolos do alfabeto da fita
+17: numero de transicoes
 
 Segunda linha:
 1: estado inicial
