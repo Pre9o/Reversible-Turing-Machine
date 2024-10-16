@@ -9,7 +9,8 @@ public partial class TuringMachine
     private List<char> historyTape = [];
     private List<char> outputTape = [];
 
-    private Dictionary<(int, char), (int, char, char)> transitions = new();
+    private List<Quintuple> transitions = new();
+    private List<int> 
     private int currentState;
     private int finalState;
 
