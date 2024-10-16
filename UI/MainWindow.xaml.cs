@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,6 +17,25 @@ namespace ReversibleTuringMachine {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+        }
+
+        private void OpenUrl(string url) {
+            Process.Start(new ProcessStartInfo() {
+                UseShellExecute = false,
+                FileName = url
+            });
+        }
+
+        private void OpenPedroProfile(object sender, MouseButtonEventArgs e) {
+            OpenUrl("https://github.com/PedroRamos360");
+        }
+
+        private void OpenPregoProfile(object sender, MouseButtonEventArgs e) {
+            OpenUrl("https://github.com/Pre9o");
+        }
+
+        private void OpenRodrigoProfile(object sender, MouseButtonEventArgs e) {
+            OpenUrl("https://github.com/Agentew04");
         }
     }
 }

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
         xmlns:local="clr-namespace:ReversibleTuringMachine"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -21,6 +22,10 @@
                     <Setter Property="IsReadOnly" Value="True" />
                 </Style>
             </Style.Resources>
+        </Style>
+        <Style TargetType="{x:Type TextBlock}" x:Key="hyperlink">
+            <Setter Property="Foreground" Value="Blue" />
+            <Setter Property="TextDecorations" Value="Underline" />
         </Style>
     </Window.Resources>
     <Grid>
@@ -121,8 +126,18 @@
         </Grid>
         
         <!-- bottom text -->
-        <Label Grid.Row="1" Grid.ColumnSpan="2"
-               Content="Made with &lt;3 by Pedro Henrique Ramos, Rafael Carneiro e Rodrigo Appelt"
-               HorizontalContentAlignment="Center"/>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <emoji:TextBlock Text="Made with ❤️ by "/>
+            <TextBlock Text="Pedro Henrique Ramos" Style="{StaticResource hyperlink}"
+                       MouseUp="OpenPedroProfile"/>
+            <TextBlock Text=", "/>
+            <TextBlock Text="Rafael Carneiro Pregardier" Style="{StaticResource hyperlink}"
+                       MouseUp="OpenPregoProfile"/>
+            <TextBlock Text=" e "/>
+            <TextBlock Text="Rodrigo Appelt" Style="{StaticResource hyperlink}"
+                       MouseUp="OpenRodrigoProfile"/>
+        </StackPanel>
     </Grid>
 </Window>
