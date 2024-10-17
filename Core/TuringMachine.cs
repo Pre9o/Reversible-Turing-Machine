@@ -83,31 +83,82 @@ public partial class TuringMachine
 
         foreach (var quintuple in quintuples)
         {
-            var quadruple = new Quadruple
-            {
+            int aLinhaLinha = states[^1] + 1;
+            if(aLinhaLinha >= 10) {
+                throw new Exception("Isso vai dar erro na 2a quad, write history tape. Mover todo codigo de simbolos p/ strings");
+            }
+            states.Add(aLinhaLinha);
+            // primeira quadrupla. Escreve na fita
+            Quadruple q1 = new() {
                 StartState = quintuple.CurrentState,
-                EndState = quintuple.NextState,
-                ActionIn = new List<Quadruple.TapeActionIn>
-                {
-                    new Quadruple.TapeActionIn
-                    {
+                EndState = aLinhaLinha,
+                ActionIn = [
+                    new(){ // input
                         Read = true,
                         SymbolRead = quintuple.ReadSymbol
+                    },
+                    new(){ // history
+                        Read = false,
+                    },
+                    new(){ // output
+                        Read = true,
+                        SymbolRead = 'b'
                     }
-                },
-                ActionOut = new List<Quadruple.TapeActionOut>
-                {
-                    new Quadruple.TapeActionOut
-                    {
+                ],
+                ActionOut = [
+                    new() { // input
                         Write = true,
                         SymbolWritten = quintuple.WriteSymbol,
+                        Move = false,
+                    },
+                    new(){ // history
+                        Write = false,
                         Move = true,
-                        MoveDirection = quintuple.MoveDirection == Direction.R ? 1 : -1
+                        MoveDirection = Direction.R
+                    },
+                    new(){ // output
+                        Write = true,
+                        SymbolWritten = 'b',
+                        Move = false
                     }
-                }
+                ]
             };
 
-            quadruples.Add(quadruple);
+            Quadruple q2 = new() {
+                StartState = aLinhaLinha,
+                EndState = quintuple.NextState,
+                ActionIn = [
+                    new(){ // input
+                        Read = false
+                    },
+                    new(){ // history
+                        Read = true,
+                        SymbolRead = 'b'
+                    },
+                    new(){ // output
+                        Read = false
+                    }
+                ],
+                ActionOut = [
+                    new(){ // input
+                        Write = false,
+                        Move = true,
+                        MoveDirection = quintuple.MoveDirection
+                    },
+                    new(){ // history
+                        Write = true,
+                        SymbolWritten = aLinhaLinha.ToString()[0],
+                    },
+                    new(){ // output
+                        Write = false,
+                        Move = true,
+                        MoveDirection = Direction.None
+                    }
+                ]
+            };
+
+            quadruples.Add(q1);
+            quadruples.Add(q2);
         }
 
         return quadruples;

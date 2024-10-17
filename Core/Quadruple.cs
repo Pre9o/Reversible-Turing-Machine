@@ -17,7 +17,7 @@ public class Quadruple {
     public struct TapeActionOut {
         public bool Write { get; set; }
         public bool Move { get; set; }
-        public int MoveDirection { get; set; }
+        public Direction MoveDirection { get; set; }
         public char SymbolWritten { get; set; }
     }
 }
