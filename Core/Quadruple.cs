@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace ReversibleTuringMachine.Core;
 
 public class Quadruple {
@@ -11,13 +13,28 @@ public class Quadruple {
 
     public struct TapeActionIn {
         public bool Read { get; set; }
-        public char SymbolRead { get; set; }
+        public string SymbolRead { get; set; }
     }
 
     public struct TapeActionOut {
         public bool Write { get; set; }
         public bool Move { get; set; }
         public Direction MoveDirection { get; set; }
-        public char SymbolWritten { get; set; }
+        public string SymbolWritten { get; set; }
+    }
+
+    public override string ToString() {
+        return $"({StartState}, [{string.Join(", ", ActionIn.Select(x=> !x.Read ? "/" : x.SymbolRead))}])" +
+            $"->" +
+            $"([{string.Join(", ", ActionOut.Select(x => 
+                x.Move ? 
+                    (x.MoveDirection switch {
+                        Direction.None => "0",
+                        Direction.R => "+1",
+                        Direction.L => "-1",
+                        _ => throw new TuringException("Invalid direction to convert to string")
+                    }) : 
+                    (x.Write ? x.SymbolWritten : "?")
+                ))}], {EndState})";
     }
 }

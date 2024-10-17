@@ -3,12 +3,12 @@ namespace ReversibleTuringMachine.Core;
 public class Quintuple
 {
     public int CurrentState { get; set; }
-    public char ReadSymbol { get; set; }
-    public char WriteSymbol { get; set; }
+    public string ReadSymbol { get; set; }
+    public string WriteSymbol { get; set; }
     public int NextState { get; set; }
     public Direction MoveDirection { get; set; }
 
-    public Quintuple(int currentState, char readSymbol, char writeSymbol, int nextState, Direction moveDirection)
+    public Quintuple(int currentState, string readSymbol, string writeSymbol, int nextState, Direction moveDirection)
     {
         CurrentState = currentState;
         ReadSymbol = readSymbol;
