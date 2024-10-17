@@ -18,4 +18,5 @@ public class QuintupleConverter
 
         return (firstQuadruple, secondQuadruple);
     }
+
 }

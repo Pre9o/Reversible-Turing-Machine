@@ -81,6 +81,42 @@ public partial class TuringMachine
         return tm;
     }
 
+    public List<Quadruple> ConvertQuintuplesToQuadruples(List<Quintuple> quintuples)
+    {
+        var quadruples = new List<Quadruple>();
+
+        foreach (var quintuple in quintuples)
+        {
+            var quadruple = new Quadruple
+            {
+                StartState = quintuple.CurrentState,
+                EndState = quintuple.NextState,
+                ActionIn = new List<Quadruple.TapeActionIn>
+                {
+                    new Quadruple.TapeActionIn
+                    {
+                        Read = true,
+                        SymbolRead = quintuple.ReadSymbol
+                    }
+                },
+                ActionOut = new List<Quadruple.TapeActionOut>
+                {
+                    new Quadruple.TapeActionOut
+                    {
+                        Write = true,
+                        SymbolWritten = quintuple.WriteSymbol,
+                        Move = true,
+                        MoveDirection = quintuple.MoveDirection == Direction.R ? 1 : -1
+                    }
+                }
+            };
+
+            quadruples.Add(quadruple);
+        }
+
+        return quadruples;
+    }
+
     public void Run()
     {
         int tapePosition = 0;
