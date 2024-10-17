@@ -1,3 +1,5 @@
+namespace ReversibleTuringMachine.Core;
+
 public class Quadruple {
     public int StartState { get; set; }
 

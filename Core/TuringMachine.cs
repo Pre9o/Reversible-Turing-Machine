@@ -1,17 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text.RegularExpressions;
+
+namespace ReversibleTuringMachine.Core;
 
 public partial class TuringMachine
 {
-    private List<char> inputTape = [];
-    private List<char> historyTape = [];
-    private List<char> outputTape = [];
-
-    private List<char> inputAlphabet = [];
-    private List<char> tapeAlphabet = [];
-    private List<Quintuple> transitions = new();
+    protected List<char> inputTape = [];
+    protected List<char> inputAlphabet = [];
+    protected List<char> tapeAlphabet = [];
+    protected List<Quintuple> transitions = [];
     private List<int> states = [];
     private int currentState = -1;
     private int finalState = -1;
@@ -107,7 +103,7 @@ public partial class TuringMachine
             }
         }
 
-        outputTape.AddRange(inputTape);
+        //outputTape.AddRange(inputTape);
 
         Console.WriteLine("Simulação concluída!");
     }
@@ -121,4 +117,10 @@ public partial class TuringMachine
 
     [GeneratedRegex(@"\((?<a0>\d+),(?<b0>.+)\)=\((?<a1>\d+),(?<b1>.+),(?<dir>[LR])\)")]
     private static partial Regex TransitionRegex();
+
+    public ReversibleTuringMachine ToReversible() {
+        ReversibleTuringMachine rtm = new();
+
+        return rtm;
+    }
 }

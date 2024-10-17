@@ -1,4 +1,4 @@
-using System;
+namespace ReversibleTuringMachine.Core;
 
 public class Quintuple
 {
