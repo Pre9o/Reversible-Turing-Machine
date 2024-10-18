@@ -63,6 +63,7 @@ public partial class MainWindow : Window {
             return;
         }
         currentStateTextbox.Text = rtm.CurrentState.ToString();
+        quadruplasListView.ItemsSource = rtm.Transitions;
         RenderTape(rtm.InputTape, inputTapeBoxes, ref inputHeadPosition);
         RenderTape(rtm.HistoryTape, historyTapeBoxes, ref historyHeadPosition);
         RenderTape(rtm.OutputTape, outputTapeBoxes, ref outputHeadPosition);

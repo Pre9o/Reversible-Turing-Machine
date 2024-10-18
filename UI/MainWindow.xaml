@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
         xmlns:local="clr-namespace:ReversibleTuringMachine"
+        xmlns:core="clr-namespace:ReversibleTuringMachine.Core;assembly=TuringMachineSim"
         mc:Ignorable="d"
         DataContext="{Binding .}"
         Title="MainWindow" Height="450" Width="800">
@@ -49,13 +50,27 @@
             <Label Grid.Row="0" Content="Histórico de Operações"
                    HorizontalAlignment="Center"
                    FontSize="18"/>
-            <ListView Grid.Row="1" Margin="5">
+            <TabControl Grid.Row="1" Margin="5">
+                <TabItem Header="Quadruplas">
+                    <ListView x:Name="quadruplasListView">
+                        <ListView.ItemTemplate>
+                            <DataTemplate DataType="{x:Type core:Quadruple}">
+                                <Label Content="{Binding .}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </TabItem>
+                <TabItem Header="Historico">
+                    
+                </TabItem>
+            </TabControl>
+            <!--<ListView Grid.Row="1" Margin="5">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>
+            </ListView>-->
         </Grid>
 
         <!-- Visao principal da maquina -->
