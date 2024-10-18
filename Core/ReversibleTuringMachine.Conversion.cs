@@ -108,10 +108,17 @@ public partial class ReversibleTuringMachine {
         FinalState = tm.FinalState;
         InputTape = tm.InputTape;
 
+        // move eles para comecarem depois do limitador de fim esquerdo
+        InputTape.Move(Direction.R);
+        HistoryTape.Move(Direction.R);
+        OutputTape.Move(Direction.R);
+
         // usa os alfabetos para criar transicoes de copia
         CopyTransitions = [];
         foreach(var symbol in tm.TapeAlphabet) {
-
+            if(symbol == "$") {
+                continue;
+            }
         }
     }
 }

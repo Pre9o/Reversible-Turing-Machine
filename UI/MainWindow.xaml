@@ -31,20 +31,16 @@
             <Setter Property="TextDecorations" Value="Underline" />
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
-        <Style TargetType="{x:Type TextBox}" x:Key="selectedFitaSlot">
-            <Setter Property="BorderThickness" Value="3" />
-            <Setter Property="BorderBrush" Value="Red" />
-        </Style>
         <Style TargetType="{x:Type StackPanel}" x:Key="fitaStackPanel">
             <Style.Resources>
-                <Style TargetType="{x:Type TextBox}">
+                <Style TargetType="{x:Type emoji:RichTextBox}">
                     <Setter Property="Margin" Value="5,0,5,0" />
-                    <Setter Property="Width" Value="25" />
+                    <Setter Property="Width" Value="30" />
                     <Setter Property="Height" Value="25" />
-                    <Setter Property="TextAlignment" Value="Center" />
+                    <!--<Setter Property="TextAlignment" Value="Center" />-->
                     <Setter Property="IsReadOnly" Value="True" />
-                    <!--<Setter Property="HorizontalContentAlignment" Value="Center" />-->
-                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Bottom" />
                     <Setter Property="Focusable" Value="False" />
                 </Style>
             </Style.Resources>
@@ -109,15 +105,15 @@
                              MinWidth="25" VerticalContentAlignment="Center"
                              IsReadOnly="True"/>
                 </StackPanel>
-                <Button Style="{StaticResource menuButton}"
+                <Button Style="{StaticResource menuButton}" IsEnabled="False"
                         Click="StepCompute" x:Name="computeStepButton">
                     <emoji:TextBlock Text="Step 💻"/>
                 </Button>
-                <Button Style="{StaticResource menuButton}"
+                <Button Style="{StaticResource menuButton}" IsEnabled="False"
                         Click="StepCopy" x:Name="copyStepButton">
                     <emoji:TextBlock Text="Step 📋"/>
                 </Button>
-                <Button Style="{StaticResource menuButton}"
+                <Button Style="{StaticResource menuButton}" IsEnabled="False"
                         Click="StepRetrace" x:Name="retraceStepButton">
                     <emoji:TextBlock Text="Step ↩"/>
                 </Button>
@@ -125,43 +121,61 @@
             </StackPanel>
 
             <!-- fita input -->
-            <StackPanel Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"
-                        Orientation="Vertical">
-                <TextBlock Text="Fita Input" Margin="5" FontSize="15"/>
-                <TextBlock Text="Pos: 0" HorizontalAlignment="Center"
-                           x:Name="inputPosLabel"/>
-            </StackPanel>
-            <StackPanel Grid.Row="1" Orientation="Horizontal"
-                        x:Name="inputStackPanel"
-                        HorizontalAlignment="Center" Style="{StaticResource fitaStackPanel}">
-                <!-- essas textbox vao ser geradas em runtime-->
-            </StackPanel>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                            Orientation="Vertical">
+                    <TextBlock Text="Fita Input" Margin="5" FontSize="15"/>
+                    <TextBlock Text="Pos: 0" HorizontalAlignment="Center"
+                               x:Name="inputPosLabel"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal"
+                            x:Name="inputStackPanel"
+                            HorizontalAlignment="Center" Style="{StaticResource fitaStackPanel}">
+                    <!-- essas textbox vao ser geradas em runtime-->
+                </StackPanel>
+            </Grid>
             
             <!-- fita historico -->
-            <StackPanel Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center"
-            Orientation="Vertical">
-                <TextBlock Text="Fita History" Margin="5" FontSize="15"/>
-                <TextBlock Text="Pos: 0" HorizontalAlignment="Center"
-                           x:Name="historyPosLabel"/>
-            </StackPanel>
-            <StackPanel Grid.Row="2" Orientation="Horizontal"
-                        x:Name="historyStackPanel"
-                        HorizontalAlignment="Center" Style="{StaticResource fitaStackPanel}">
-                <!-- essas textbox vao ser geradas em runtime-->
-            </StackPanel>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                Orientation="Vertical">
+                    <TextBlock Text="Fita History" Margin="5" FontSize="15"/>
+                    <TextBlock Text="Pos: 0" HorizontalAlignment="Center"
+                               x:Name="historyPosLabel"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal"
+                            x:Name="historyStackPanel"
+                            HorizontalAlignment="Center" Style="{StaticResource fitaStackPanel}">
+                    <!-- essas textbox vao ser geradas em runtime-->
+                </StackPanel>
+            </Grid>
 
             <!-- fita output -->
-            <StackPanel Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center"
-            Orientation="Vertical">
-                <TextBlock Text="Fita Output" Margin="5" FontSize="15"/>
-                <TextBlock Text="Pos: 0" HorizontalAlignment="Center"
-                           x:Name="outputPosLabel"/>
-            </StackPanel>
-            <StackPanel Grid.Row="3" Orientation="Horizontal"
-                        x:Name="outputStackPanel"
-                        HorizontalAlignment="Center" Style="{DynamicResource fitaStackPanel}">
-                <!-- essas textbox vao ser geradas em runtime-->
-            </StackPanel>
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                Orientation="Vertical">
+                    <TextBlock Text="Fita Output" Margin="5" FontSize="15"/>
+                    <TextBlock Text="Pos: 0" HorizontalAlignment="Center"
+                               x:Name="outputPosLabel"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal"
+                            x:Name="outputStackPanel"
+                            HorizontalAlignment="Center" Style="{DynamicResource fitaStackPanel}">
+                    <!-- essas textbox vao ser geradas em runtime-->
+                </StackPanel>
+            </Grid>
         </Grid>
         
         <!-- bottom text -->

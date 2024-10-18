@@ -13,10 +13,12 @@ public class Tape {
     public int TotalSize => Cells.Count;
 
     public const string BlankSymbol = "B";
+    public const string LimitSymbol = "^";
 
     public Tape(List<string>? cells = null) {
         cells ??= [];
         Cells = cells;
+        Cells.Insert(0, LimitSymbol);
     }
 
     public void Move(Direction direction) {

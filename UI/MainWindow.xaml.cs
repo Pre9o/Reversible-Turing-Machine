@@ -20,9 +20,9 @@ namespace ReversibleTuringMachine;
 /// Interaction logic for MainWindow.xaml
 /// </summary>
 public partial class MainWindow : Window {
-    private readonly List<TextBox> inputTapeBoxes = [];
-    private readonly List<TextBox> historyTapeBoxes = [];
-    private readonly List<TextBox> outputTapeBoxes = [];
+    private readonly List<Emoji.Wpf.RichTextBox> inputTapeBoxes = [];
+    private readonly List<Emoji.Wpf.RichTextBox> historyTapeBoxes = [];
+    private readonly List<Emoji.Wpf.RichTextBox> outputTapeBoxes = [];
     private int inputHeadPosition = 0;   // atualizar isso quando for muito para a direita
     private int historyHeadPosition = 0; // e precisar rolar a fita
     private int outputHeadPosition = 0;
@@ -30,6 +30,7 @@ public partial class MainWindow : Window {
     private Core.ReversibleTuringMachine? rtm;
 
     private const string Blank = "";
+    private const string Limit = "❌";
 
     public MainWindow() {
         InitializeComponent();
@@ -44,10 +45,10 @@ public partial class MainWindow : Window {
 
     #region User Interface
 
-    private static void CreateTapes(StackPanel parent, List<TextBox> boxList) {
+    private static void CreateTapes(StackPanel parent, List<Emoji.Wpf.RichTextBox> boxList) {
         int boxCount = 9;
         for (int i = 0; i < boxCount; i++) {
-            TextBox tb = new();
+            Emoji.Wpf.RichTextBox tb = new();
             if (i == 0) {
                 tb.BorderThickness = new(3);
                 tb.BorderBrush = Brushes.Red;
@@ -85,24 +86,24 @@ public partial class MainWindow : Window {
         outputPosLabel.Text = $"Pos: {rtm.OutputTape.HeadPosition}";
     }
 
-    private void RenderTape(Tape tape, List<TextBox> boxList, ref int headPosition) {
+    private void RenderTape(Tape tape, List<Emoji.Wpf.RichTextBox> boxList, ref int headPosition) {
         for (int i = 0; i < boxList.Count; i++) {
-            TextBox tb = boxList[i];
+            Emoji.Wpf.RichTextBox tb = boxList[i];
             if(i >= tape.TotalSize) {
                 tb.Text = Blank;
                 StyleTapeBox(tb, false);
                 continue;
             }
-            if (tape.Cells[i] == Tape.BlankSymbol) {
-                tb.Text = Blank;
-            } else {
-                tb.Text = tape.Cells[i];
-            }
+            tb.Text = tape.Cells[i] switch {
+                Tape.BlankSymbol => Blank,
+                Tape.LimitSymbol => Limit,
+                _ => tape.Cells[i],
+            };
             StyleTapeBox(tb, i == tape.HeadPosition);
         }
     }
 
-    private static void StyleTapeBox(TextBox tb, bool isHead) {
+    private static void StyleTapeBox(Emoji.Wpf.RichTextBox tb, bool isHead) {
         if (isHead) {
             tb.BorderThickness = new(3);
             tb.BorderBrush = Brushes.Red;
