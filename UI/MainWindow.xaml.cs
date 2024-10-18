@@ -68,7 +68,15 @@ public partial class MainWindow : Window {
             return;
         }
         currentStateTextbox.Text = rtm.CurrentState.ToString();
-        quadruplasListView.ItemsSource = rtm.ComputeTransitions;
+        computeTransitionsListView.ItemsSource = null; // tem q setar p/ null para forcar refresh do controle
+        computeTransitionsListView.ItemsSource = rtm.ComputeTransitions;
+
+        copyTransitionsListView.ItemsSource = null;
+        copyTransitionsListView.ItemsSource = rtm.CopyTransitions;
+
+        retraceTransitionsListView.ItemsSource = null;
+        retraceTransitionsListView.ItemsSource = rtm.RetraceTransitions;
+
         RenderTape(rtm.InputTape, inputTapeBoxes, ref inputHeadPosition);
         RenderTape(rtm.HistoryTape, historyTapeBoxes, ref historyHeadPosition);
         RenderTape(rtm.OutputTape, outputTapeBoxes, ref outputHeadPosition);
@@ -144,7 +152,7 @@ public partial class MainWindow : Window {
             using FileStream fs = File.OpenRead(path);
             using StreamReader sr = new(fs);
             TuringMachine tm = await TuringMachine.FromStreamAsync(sr);
-            rtm = tm.ToReversible();
+            rtm = new Core.ReversibleTuringMachine(tm);
             UpdateInterface();
         }
     }

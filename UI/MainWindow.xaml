@@ -10,6 +10,22 @@
         DataContext="{Binding .}"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
+        <DataTemplate x:Key="quadrupleTemplate" DataType="{x:Type core:Quadruple}">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="{Binding .}">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Foreground" Value="Black" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                <Setter Property="Foreground" Value="Red"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            </StackPanel>
+        </DataTemplate>
         <Style TargetType="{x:Type TextBlock}" x:Key="hyperlink">
             <Setter Property="Foreground" Value="Blue" />
             <Setter Property="TextDecorations" Value="Underline" />
@@ -58,8 +74,12 @@
                    HorizontalAlignment="Center"
                    FontSize="18"/>
             <TabControl Grid.Row="1" Margin="5">
-                <TabItem Header="Quadruplas">
-                    <ListView x:Name="quadruplasListView">
+                <TabItem Header="Compute">
+                    <ListView x:Name="computeTransitionsListView"
+                              ItemTemplate="{StaticResource quadrupleTemplate}"/>
+                </TabItem>
+                <TabItem Header="Copy">
+                    <ListView x:Name="copyTransitionsListView">
                         <ListView.ItemTemplate>
                             <DataTemplate DataType="{x:Type core:Quadruple}">
                                 <Label Content="{Binding .}"/>
@@ -67,17 +87,16 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </TabItem>
-                <TabItem Header="Historico">
-                    
+                <TabItem Header="Retrace">
+                    <ListView x:Name="retraceTransitionsListView">
+                        <ListView.ItemTemplate>
+                            <DataTemplate DataType="{x:Type core:Quadruple}">
+                                <Label Content="{Binding .}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </TabItem>
             </TabControl>
-            <!--<ListView Grid.Row="1" Margin="5">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>-->
         </Grid>
 
         <!-- Visao principal da maquina -->

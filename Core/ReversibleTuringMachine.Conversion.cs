@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Intrinsics.Arm;
 using System.Text;
 using System.Threading.Tasks;
 using static ReversibleTuringMachine.Core.ReversibleTuringMachine;
@@ -92,5 +94,20 @@ public partial class ReversibleTuringMachine {
     public ReversibleTuringMachine(TuringMachine tm) {
         States = new(tm.States);
         ComputeTransitions = ConvertQuintuplesToQuadruples(tm.Transitions, States);
+
+        // verifica se tem o numero certo de transicoes
+        if (ComputeTransitions.Count != 2 * tm.Transitions.Count) {
+            throw new TuringException("Number of quadruples is not twice the number of quintuples");
+        }
+        if (tm.States.Count + tm.Transitions.Count != States.Count) {
+            throw new TuringException($"Expected one new state for each quintuple. Expected: {tm.States.Count + tm.Transitions.Count}.\n" +
+                $"Got: {States.Count}");
+        }
+
+        CurrentState = tm.CurrentState;
+        FinalState = tm.FinalState;
+        InputTape = tm.InputTape;
+        // usa os alfabetos pra alguma coisa?
+        // soh se for checar a validade do input
     }
 }

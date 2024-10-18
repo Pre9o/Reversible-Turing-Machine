@@ -11,6 +11,12 @@ public class Quadruple {
 
     public List<TapeActionOut> ActionOut { get; set; } = [];
 
+    /// <summary>
+    /// Usado para mostrar qual foi a transicao usada
+    /// na interface. Nao interfere no funcionamento
+    /// </summary>
+    public bool IsActive { get; set; } = false;
+
     public struct TapeActionIn {
         public bool Read { get; set; }
         public string SymbolRead { get; set; }

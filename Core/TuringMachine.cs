@@ -13,7 +13,7 @@ public partial class TuringMachine
     public List<Quintuple> Transitions { get; set; } = [];
     public List<int> States { get; set; } = [];
     public int CurrentState { get; protected set; } = -1;
-    protected int finalState = -1;
+    public int FinalState { get; protected set; } = -1;
     
     protected TuringMachine() { }
 
@@ -36,7 +36,7 @@ public partial class TuringMachine
         }
         tm.States = statesRead.ToList();
         tm.CurrentState = tm.States[0];
-        tm.finalState = tm.States[^1];
+        tm.FinalState = tm.States[^1];
 
         string? f3 = await sr.ReadLineAsync() ?? throw new TuringException("Could not read line 3");
         List<string> starterAlphabet = f3.Split(' ')
@@ -186,7 +186,7 @@ public partial class TuringMachine
         }
 
         rtm.CurrentState = CurrentState;
-        rtm.finalState = finalState;
+        rtm.FinalState = FinalState;
         rtm.States = newStates;
         rtm.tapeAlphabet = tapeAlphabet;
         rtm.inputAlphabet = inputAlphabet;

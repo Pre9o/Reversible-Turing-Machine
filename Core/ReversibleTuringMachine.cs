@@ -22,6 +22,13 @@ public partial class ReversibleTuringMachine : TuringMachine {
         {Stage.Retrace, false},
     };
 
+    /// <summary>
+    /// Ultima transicao tomada. Usado para
+    /// deselecionar o highlight na lista
+    /// de transicoes.
+    /// </summary>
+    private Quadruple? lastTransitionTaken = null;
+
     public ReversibleTuringMachine() {}
 
     public bool IsFinished(Stage stage) {
@@ -94,8 +101,14 @@ public partial class ReversibleTuringMachine : TuringMachine {
         // ok, agora aplicamos a transicao
         ApplyTransition(transition);
 
+        if(lastTransitionTaken is not null) {
+            lastTransitionTaken.IsActive = false;
+        }
+        transition.IsActive = true;
+        lastTransitionTaken = transition;
+
         // verifica se acabou
-        if (CurrentState == finalState) {
+        if (CurrentState == FinalState) {
             executionState[Stage.Compute] = true;
         }
     }
