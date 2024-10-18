@@ -58,15 +58,23 @@ public partial class MainWindow : Window {
     }
 
     private void UpdateInterface() {
-        stepButton.IsEnabled = rtm is not null;
+        computeStepButton.IsEnabled = !(rtm?.IsFinished(Core.ReversibleTuringMachine.Stage.Compute) ?? false);
+        copyStepButton.IsEnabled = (!(rtm?.IsFinished(Core.ReversibleTuringMachine.Stage.Copy) ?? false))
+            && !computeStepButton.IsEnabled;
+        retraceStepButton.IsEnabled = (!(rtm?.IsFinished(Core.ReversibleTuringMachine.Stage.Retrace) ?? false))
+            && !computeStepButton.IsEnabled 
+            && !copyStepButton.IsEnabled;
         if (rtm is null) {
             return;
         }
         currentStateTextbox.Text = rtm.CurrentState.ToString();
-        quadruplasListView.ItemsSource = rtm.Transitions;
+        quadruplasListView.ItemsSource = rtm.ComputeTransitions;
         RenderTape(rtm.InputTape, inputTapeBoxes, ref inputHeadPosition);
         RenderTape(rtm.HistoryTape, historyTapeBoxes, ref historyHeadPosition);
         RenderTape(rtm.OutputTape, outputTapeBoxes, ref outputHeadPosition);
+        inputPosLabel.Text = $"Pos: {rtm.InputTape.HeadPosition}";
+        historyPosLabel.Text = $"Pos: {rtm.HistoryTape.HeadPosition}";
+        outputPosLabel.Text = $"Pos: {rtm.OutputTape.HeadPosition}";
     }
 
     private void RenderTape(Tape tape, List<TextBox> boxList, ref int headPosition) {
@@ -141,17 +149,48 @@ public partial class MainWindow : Window {
         }
     }
 
-    public void Step(object sender, RoutedEventArgs e) {
+    public void StepCompute(object sender, RoutedEventArgs e) {
         if(rtm is null) {
             MessageBox.Show("No machine loaded");
             return;
         }
-        if (rtm.IsFinished()) {
-            MessageBox.Show("Machine is finished");
+        if (rtm.IsFinished(Core.ReversibleTuringMachine.Stage.Compute)) {
+            MessageBox.Show("Machine finished execution. Proceed to Copy stage.");
+            UpdateInterface();
             return;
         }
 
-        rtm.Step();
+        rtm.ExecuteStep();
+        UpdateInterface();
+    }
+
+    public void StepCopy(object sender, RoutedEventArgs e) {
+        if (rtm is null) {
+            MessageBox.Show("No machine loaded");
+            return;
+        }
+        if (rtm.IsFinished(Core.ReversibleTuringMachine.Stage.Copy)) {
+            MessageBox.Show("Machine finished copy. Proceed to Retrace stage.");
+            UpdateInterface();
+            return;
+        }
+
+        rtm.CopyStep();
+        UpdateInterface();
+    }
+
+    public void StepRetrace(object sender, RoutedEventArgs e) {
+        if (rtm is null) {
+            MessageBox.Show("No machine loaded");
+            return;
+        }
+        if (rtm.IsFinished(Core.ReversibleTuringMachine.Stage.Retrace)) {
+            MessageBox.Show("Machine finished all simulations.");
+            UpdateInterface();
+            return;
+        }
+
+        rtm.RetraceStep();
         UpdateInterface();
     }
 

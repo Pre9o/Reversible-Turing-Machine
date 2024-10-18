@@ -5,21 +5,33 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ReversibleTuringMachine.Core; 
-public class ReversibleTuringMachine : TuringMachine {
+
+// esse partial indica que a classe esta dividida
+// entre varios arquivos. melhor para organizacao
+public partial class ReversibleTuringMachine : TuringMachine {
 
     public Tape HistoryTape { get; protected set; } = new();
     public Tape OutputTape { get; protected set; }  = new();
-    public List<Quadruple> Transitions { get; init; } = [];
-    
-    public bool IsFinished() {
-        return CurrentState == finalState;
+    public List<Quadruple> ComputeTransitions { get; set; } = [];
+    public List<Quadruple> CopyTransitions { get; set; } = [];
+    public List<Quadruple> RetraceTransitions { get; set; }  = [];
+
+    private readonly Dictionary<Stage, bool> executionState = new() {
+        { Stage.Compute, false},
+        {Stage.Copy, false},
+        {Stage.Retrace, false},
+    };
+
+    public ReversibleTuringMachine() {}
+
+    public bool IsFinished(Stage stage) {
+        return executionState[stage];
     }
 
-    public void Step() {
-        var candidateTransitions = Transitions.Where(x => x.StartState == CurrentState);
+    private Quadruple? FindTransition(List<Quadruple> transitions) {
+        var candidateTransitions = transitions.Where(x => x.StartState == CurrentState);
 
-        Quadruple? transition = null;
-        foreach(var candidate in candidateTransitions) {
+        foreach (var candidate in candidateTransitions) {
             // input action
             if (candidate.ActionIn[0].Read && candidate.ActionIn[0].SymbolRead != InputTape.SymbolAtHead()) {
                 continue;
@@ -34,20 +46,16 @@ public class ReversibleTuringMachine : TuringMachine {
             }
 
             // se chegou aqui eh que nao se opoe pelos inputs, deve ser a certa
-            transition = candidate;
-            break;
+            return candidate;
         }
+        return null;
+    }
 
-        if (transition == null) {
-            throw new TuringException("No transition found");
-        }
-
-        // ok, agora aplicamos a transicao
-
+    private void ApplyTransition(Quadruple transition) {
         // fita input
         if (transition.ActionOut[0].Write) {
             InputTape.WriteSymbol(transition.ActionOut[0].SymbolWritten);
-        }else if (transition.ActionOut[0].Move) {
+        } else if (transition.ActionOut[0].Move) {
             InputTape.Move(transition.ActionOut[0].MoveDirection);
         } else {
             throw new TuringException("Invalid action. Did not move nor write on input Tape");
@@ -72,5 +80,43 @@ public class ReversibleTuringMachine : TuringMachine {
         }
 
         CurrentState = transition.EndState;
+    }
+
+    /// <summary>
+    /// Executa um tick da maquina no 1o estagio de
+    /// execucao da maquina.
+    /// </summary>
+    /// <exception cref="TuringException"></exception>
+    public void ExecuteStep() {
+        // procura a transicao certa
+        Quadruple transition = FindTransition(ComputeTransitions) ?? throw new TuringException("No transition found");
+
+        // ok, agora aplicamos a transicao
+        ApplyTransition(transition);
+
+        // verifica se acabou
+        if (CurrentState == finalState) {
+            executionState[Stage.Compute] = true;
+        }
+    }
+
+    /// <summary>
+    /// Executa um tick da maquina para copiar 
+    /// </summary>
+    public void CopyStep() {
+        Quadruple transition = FindTransition(CopyTransitions) ?? throw new TuringException("No transition found");
+        ApplyTransition(transition);
+        // verifica se acabou. como?
+    }
+
+    public void RetraceStep() {
+        Quadruple transition = FindTransition(RetraceTransitions) ?? throw new TuringException("No transition found");
+        ApplyTransition(transition);
+    }
+
+    public enum Stage {
+        Compute,
+        Copy,
+        Retrace
     }
 }

@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -8,8 +10,8 @@ public partial class TuringMachine
     public Tape InputTape { get; protected set; }
     protected List<string> inputAlphabet = [];
     protected List<string> tapeAlphabet = [];
-    protected List<Quintuple> transitions = [];
-    private List<int> states = [];
+    public List<Quintuple> Transitions { get; set; } = [];
+    public List<int> States { get; set; } = [];
     public int CurrentState { get; protected set; } = -1;
     protected int finalState = -1;
     
@@ -32,9 +34,9 @@ public partial class TuringMachine
         if (statesRead.Count != numStates) {
             throw new TuringException($"Invalid number of states. Expected {numStates}. Got {statesRead.Count}!");
         }
-        tm.states = statesRead.ToList();
-        tm.CurrentState = tm.states[0];
-        tm.finalState = tm.states[^1];
+        tm.States = statesRead.ToList();
+        tm.CurrentState = tm.States[0];
+        tm.finalState = tm.States[^1];
 
         string? f3 = await sr.ReadLineAsync() ?? throw new TuringException("Could not read line 3");
         List<string> starterAlphabet = f3.Split(' ')
@@ -74,7 +76,7 @@ public partial class TuringMachine
                 direction);
             quints.Add(quint);
         }
-        tm.transitions = quints;
+        tm.Transitions = quints;
 
         var input = await sr.ReadLineAsync() ?? throw new TuringException("Could not read input");
         tm.InputTape = new Tape(input
@@ -83,14 +85,13 @@ public partial class TuringMachine
         return tm;
     }
 
-    public List<Quadruple> ConvertQuintuplesToQuadruples(List<Quintuple> quintuples)
+    public static List<Quadruple> ConvertQuintuplesToQuadruples(List<Quintuple> quintuples, List<int> states)
     {
         var quadruples = new List<Quadruple>();
 
         foreach (var quintuple in quintuples)
         {
-            int aLinhaLinha = states[^1] + 1;
-            states.Add(aLinhaLinha);
+            int aLinhaLinha = states.AddState();
             // primeira quadrupla. Escreve na fita
             Quadruple q1 = new() {
                 StartState = quintuple.CurrentState,
@@ -171,25 +172,22 @@ public partial class TuringMachine
     private static partial Regex TransitionRegex();
 
     public ReversibleTuringMachine ToReversible() {
-        int preConversionStateCount = states.Count;
 
-        ReversibleTuringMachine rtm = new() {
-            // essa operacao adiciona novos estados, entao tem que ser feita primeiro
-            // essa op fica dentro do initializer pq eh init only
-            Transitions = ConvertQuintuplesToQuadruples(transitions)
-        };
+        List<int> newStates = new(States);
+        ReversibleTuringMachine rtm = new();
 
-        if(rtm.Transitions.Count != 2 * transitions.Count) {
+        rtm.ComputeTransitions = ConvertQuintuplesToQuadruples(Transitions, newStates);
+        if(rtm.ComputeTransitions.Count != 2 * Transitions.Count) {
             throw new TuringException("Number of quadruples is not twice the number of quintuples");
         }
-        if(preConversionStateCount + transitions.Count != states.Count) {
-            throw new TuringException($"Expected one new state for each quintuple. Expected: {preConversionStateCount + transitions.Count}.\n" +
-                $"Got: {states.Count}");
+        if(States.Count + Transitions.Count != newStates.Count) {
+            throw new TuringException($"Expected one new state for each quintuple. Expected: {States.Count + Transitions.Count}.\n" +
+                $"Got: {newStates.Count}");
         }
 
         rtm.CurrentState = CurrentState;
         rtm.finalState = finalState;
-        rtm.states = states;
+        rtm.States = newStates;
         rtm.tapeAlphabet = tapeAlphabet;
         rtm.inputAlphabet = inputAlphabet;
         rtm.InputTape = InputTape;
