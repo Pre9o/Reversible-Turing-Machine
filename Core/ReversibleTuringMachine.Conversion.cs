@@ -107,7 +107,11 @@ public partial class ReversibleTuringMachine {
         CurrentState = tm.CurrentState;
         FinalState = tm.FinalState;
         InputTape = tm.InputTape;
-        // usa os alfabetos pra alguma coisa?
-        // soh se for checar a validade do input
+
+        // usa os alfabetos para criar transicoes de copia
+        CopyTransitions = [];
+        foreach(var symbol in tm.TapeAlphabet) {
+
+        }
     }
 }

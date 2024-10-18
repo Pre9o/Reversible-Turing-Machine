@@ -79,22 +79,12 @@
                               ItemTemplate="{StaticResource quadrupleTemplate}"/>
                 </TabItem>
                 <TabItem Header="Copy">
-                    <ListView x:Name="copyTransitionsListView">
-                        <ListView.ItemTemplate>
-                            <DataTemplate DataType="{x:Type core:Quadruple}">
-                                <Label Content="{Binding .}"/>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                    <ListView x:Name="copyTransitionsListView"
+                              ItemTemplate="{StaticResource quadrupleTemplate}"/>
                 </TabItem>
                 <TabItem Header="Retrace">
-                    <ListView x:Name="retraceTransitionsListView">
-                        <ListView.ItemTemplate>
-                            <DataTemplate DataType="{x:Type core:Quadruple}">
-                                <Label Content="{Binding .}"/>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                    <ListView x:Name="retraceTransitionsListView"
+                              ItemTemplate="{StaticResource quadrupleTemplate}"/>
                 </TabItem>
             </TabControl>
         </Grid>
@@ -138,7 +128,7 @@
             <StackPanel Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"
                         Orientation="Vertical">
                 <TextBlock Text="Fita Input" Margin="5" FontSize="15"/>
-                <TextBlock Text="Pos: 5" HorizontalAlignment="Center"
+                <TextBlock Text="Pos: 0" HorizontalAlignment="Center"
                            x:Name="inputPosLabel"/>
             </StackPanel>
             <StackPanel Grid.Row="1" Orientation="Horizontal"
@@ -151,7 +141,7 @@
             <StackPanel Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center"
             Orientation="Vertical">
                 <TextBlock Text="Fita History" Margin="5" FontSize="15"/>
-                <TextBlock Text="Pos: 5" HorizontalAlignment="Center"
+                <TextBlock Text="Pos: 0" HorizontalAlignment="Center"
                            x:Name="historyPosLabel"/>
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal"
@@ -164,7 +154,7 @@
             <StackPanel Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center"
             Orientation="Vertical">
                 <TextBlock Text="Fita Output" Margin="5" FontSize="15"/>
-                <TextBlock Text="Pos: 5" HorizontalAlignment="Center"
+                <TextBlock Text="Pos: 0" HorizontalAlignment="Center"
                            x:Name="outputPosLabel"/>
             </StackPanel>
             <StackPanel Grid.Row="3" Orientation="Horizontal"

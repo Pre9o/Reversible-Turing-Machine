@@ -8,8 +8,8 @@ namespace ReversibleTuringMachine.Core;
 public partial class TuringMachine
 {
     public Tape InputTape { get; protected set; }
-    protected List<string> inputAlphabet = [];
-    protected List<string> tapeAlphabet = [];
+    public List<string> InputAlphabet { get; set; } = [];
+    public List<string> TapeAlphabet { get; set; } = [];
     public List<Quintuple> Transitions { get; set; } = [];
     public List<int> States { get; set; } = [];
     public int CurrentState { get; protected set; } = -1;
@@ -46,7 +46,7 @@ public partial class TuringMachine
         if(starterAlphabet.Count != numAlphaInput) {
             throw new TuringException($"Invalid number of input alphabet symbols. Expected {numAlphaInput}. Got {starterAlphabet.Count}!");
         }
-        tm.inputAlphabet = starterAlphabet;
+        tm.InputAlphabet = starterAlphabet;
 
         string? f4 = await sr.ReadLineAsync() ?? throw new TuringException("Could not read line 4");
         List<string> machineAlphabet = f4.Split(' ')
@@ -56,7 +56,7 @@ public partial class TuringMachine
         if (machineAlphabet.Count != numAlphaTape) {
             throw new TuringException($"Invalid number of machine alphabet symbols. Expected {numAlphaTape}. Got {machineAlphabet.Count}!");
         }
-        tm.tapeAlphabet = machineAlphabet;
+        tm.TapeAlphabet = machineAlphabet;
 
         List<Quintuple> quints = [];
         for(int i = 0; i < numTransitions; i++) {
@@ -188,8 +188,8 @@ public partial class TuringMachine
         rtm.CurrentState = CurrentState;
         rtm.FinalState = FinalState;
         rtm.States = newStates;
-        rtm.tapeAlphabet = tapeAlphabet;
-        rtm.inputAlphabet = inputAlphabet;
+        rtm.TapeAlphabet = TapeAlphabet;
+        rtm.InputAlphabet = InputAlphabet;
         rtm.InputTape = InputTape;
         // outras fitas sao inicializadas vazias
 
