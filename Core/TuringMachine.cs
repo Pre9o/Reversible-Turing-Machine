@@ -5,13 +5,15 @@ namespace ReversibleTuringMachine.Core;
 
 public partial class TuringMachine
 {
-    protected List<string> inputTape = [];
+    public Tape InputTape { get; protected set; }
     protected List<string> inputAlphabet = [];
     protected List<string> tapeAlphabet = [];
     protected List<Quintuple> transitions = [];
     private List<int> states = [];
-    protected int currentState = -1;
+    public int CurrentState { get; protected set; } = -1;
     protected int finalState = -1;
+    
+    protected TuringMachine() { }
 
     public static async Task<TuringMachine> FromStreamAsync(StreamReader sr) {
         var tm = new TuringMachine();
@@ -31,7 +33,7 @@ public partial class TuringMachine
             throw new TuringException($"Invalid number of states. Expected {numStates}. Got {statesRead.Count}!");
         }
         tm.states = statesRead.ToList();
-        tm.currentState = tm.states[0];
+        tm.CurrentState = tm.states[0];
         tm.finalState = tm.states[^1];
 
         string? f3 = await sr.ReadLineAsync() ?? throw new TuringException("Could not read line 3");
@@ -75,9 +77,9 @@ public partial class TuringMachine
         tm.transitions = quints;
 
         var input = await sr.ReadLineAsync() ?? throw new TuringException("Could not read input");
-        tm.inputTape = input
+        tm.InputTape = new Tape(input
             .Select(x => x.ToString()) // cada char vira uma string
-            .ToList();
+            .ToList());
         return tm;
     }
 
@@ -103,7 +105,7 @@ public partial class TuringMachine
                     },
                     new(){ // output
                         Read = true,
-                        SymbolRead = "b"
+                        SymbolRead = Tape.BlankSymbol
                     }
                 ],
                 ActionOut = [
@@ -119,7 +121,7 @@ public partial class TuringMachine
                     },
                     new(){ // output
                         Write = true,
-                        SymbolWritten = "b",
+                        SymbolWritten = Tape.BlankSymbol,
                         Move = false
                     }
                 ]
@@ -134,7 +136,7 @@ public partial class TuringMachine
                     },
                     new(){ // history
                         Read = true,
-                        SymbolRead = "b"
+                        SymbolRead = Tape.BlankSymbol
                     },
                     new(){ // output
                         Read = false
@@ -185,11 +187,13 @@ public partial class TuringMachine
                 $"Got: {states.Count}");
         }
 
-        rtm.currentState = currentState;
+        rtm.CurrentState = CurrentState;
         rtm.finalState = finalState;
         rtm.states = states;
         rtm.tapeAlphabet = tapeAlphabet;
         rtm.inputAlphabet = inputAlphabet;
+        rtm.InputTape = InputTape;
+        // outras fitas sao inicializadas vazias
 
         return rtm;
     }

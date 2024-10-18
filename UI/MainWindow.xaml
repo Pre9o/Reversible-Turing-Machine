@@ -6,6 +6,7 @@
         xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
         xmlns:local="clr-namespace:ReversibleTuringMachine"
         mc:Ignorable="d"
+        DataContext="{Binding .}"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}" x:Key="hyperlink">
@@ -77,12 +78,17 @@
                              MinWidth="25" VerticalContentAlignment="Center"
                              IsReadOnly="True"/>
                 </StackPanel>
+                <Button Margin="5" Content="Passo" Padding="5,3"
+                        Click="Step" IsEnabled="False" x:Name="stepButton"/>
                 <!-- mais informacoes na top bar adicionar aqui-->
             </StackPanel>
 
             <!-- fita input -->
-            <TextBlock Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"
-                       Text="Fita Input" Margin="5" FontSize="15"/>
+            <StackPanel Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Orientation="Vertical">
+                <TextBlock Text="Fita Input" Margin="5" FontSize="15"/>
+                <TextBlock Text="Pos: 5" HorizontalAlignment="Center"/>
+            </StackPanel>
             <StackPanel Grid.Row="1" Orientation="Horizontal"
                         x:Name="inputStackPanel"
                         HorizontalAlignment="Center" Style="{StaticResource fitaStackPanel}">
@@ -90,8 +96,11 @@
             </StackPanel>
             
             <!-- fita historico -->
-            <TextBlock Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center"
-           Text="Fita History" Margin="5" FontSize="15"/>
+            <StackPanel Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center"
+            Orientation="Vertical">
+                <TextBlock Text="Fita History" Margin="5" FontSize="15"/>
+                <TextBlock Text="Pos: 5" HorizontalAlignment="Center"/>
+            </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal"
                         x:Name="historyStackPanel"
                         HorizontalAlignment="Center" Style="{StaticResource fitaStackPanel}">
@@ -99,8 +108,11 @@
             </StackPanel>
 
             <!-- fita output -->
-            <TextBlock Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center"
-                       Text="Fita Output" Margin="5" FontSize="15"/>
+            <StackPanel Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+            Orientation="Vertical">
+                <TextBlock Text="Fita Output" Margin="5" FontSize="15"/>
+                <TextBlock Text="Pos: 5" HorizontalAlignment="Center"/>
+            </StackPanel>
             <StackPanel Grid.Row="3" Orientation="Horizontal"
                         x:Name="outputStackPanel"
                         HorizontalAlignment="Center" Style="{DynamicResource fitaStackPanel}">
