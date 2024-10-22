@@ -12,7 +12,7 @@ public class Tape {
 
     public int TotalSize {
         get {
-            int lastBlank = Cells.LastIndexOf(BlankSymbol);
+            int lastBlank = Cells.IndexOf(BlankSymbol);
             if(lastBlank == -1) {
                 return Cells.Count;
             } else {

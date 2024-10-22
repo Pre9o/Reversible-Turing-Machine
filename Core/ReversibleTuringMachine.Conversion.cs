@@ -463,6 +463,8 @@ public partial class ReversibleTuringMachine {
             RetraceTransitions.Add(g1);
             RetraceTransitions.Add(g2);
         }
+
+        RetraceFinalState = retraceStateDict[CurrentState];
     }
 }   
 
