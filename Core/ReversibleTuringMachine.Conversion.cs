@@ -14,6 +14,7 @@ public partial class ReversibleTuringMachine {
     private new static List<Quadruple> ConvertQuintuplesToQuadruples(List<Quintuple> quintuples, List<int> states) {
         var quadruples = new List<Quadruple>();
 
+        int i = 0;
         foreach (var quintuple in quintuples) {
             int aLinhaLinha = states.AddState();
             // primeira quadrupla. Escreve na fita
@@ -42,7 +43,7 @@ public partial class ReversibleTuringMachine {
                     new(){ // history
                         Write = false,
                         Move = true,
-                        MoveDirection = Direction.R
+                        MoveDirection = i!=0 ? Direction.R : Direction.None
                     },
                     new(){ // output
                         Write = true,
@@ -87,6 +88,7 @@ public partial class ReversibleTuringMachine {
 
             quadruples.Add(q1);
             quadruples.Add(q2);
+            i++;
         }
 
         return quadruples;
@@ -342,6 +344,7 @@ public partial class ReversibleTuringMachine {
 
 
         RetraceTransitions = [];
+        Dictionary<int, int> retraceStateDict = [];
         // esse CF eh o ultimo estado do copy transitions
         if (ComputeTransitions.Count % 2 != 0)
         {
@@ -349,25 +352,56 @@ public partial class ReversibleTuringMachine {
         }
         for (int i = ComputeTransitions.Count - 1; i > 0; i-=2)
         {
-            var t2 = ComputeTransitions[i];
-            var t1 = ComputeTransitions[i - 1];
+            var t2 = ComputeTransitions[i];// a -> a'
+            var t1 = ComputeTransitions[i - 1]; // a' -> b
 
-            int cTemp = States.AddState();
-            int cNew = States.AddState();
+            int cTemp = States.AddState(); // a' pra nova transicao
 
-            var g1 = new Quadruple();
-            g1.StartState = c;
-            g1.EndState = cTemp;
-            g1.ActionIn = [default, default, default];
-            g1.ActionOut = [default, default, default];
 
-            var g2 = new Quadruple();
-            g2.StartState = cTemp;
-            g2.EndState = cNew;
-            g2.ActionIn = [default, default, default];
-            g2.ActionOut = [default, default, default];
+            int a = t1.StartState;
+            int b = t2.EndState;
+
+            bool first = false;
+            if(i == ComputeTransitions.Count - 1 && b == FinalState) {
+                b = c;
+                first = true;
+            }
+
+            if (retraceStateDict.TryGetValue(a, out int valueA)) {
+                a = valueA;
+            } else {
+                retraceStateDict[a] = States.AddState();
+                a = retraceStateDict[a];
+            }
+
+            if (retraceStateDict.TryGetValue(b, out int valueB)) {
+                b = valueB;
+            } else {
+                if (first) {
+                    retraceStateDict[b] = b;
+                } else {
+                    retraceStateDict[b] = States.AddState();
+                    b = retraceStateDict[b];
+                }
+            }
+
+            var g1 = new Quadruple {
+                StartState = b,
+                EndState = cTemp,
+                ActionIn = [default, default, default],
+                ActionOut = [default, default, default]
+            };
+
+            var g2 = new Quadruple {
+                StartState = cTemp,
+                EndState = a,
+                ActionIn = [default, default, default],
+                ActionOut = [default, default, default]
+            };
 
             // magia negra, inverte t1 e t2 em g1 e g2
+
+            // [ / m / ] -> [ -d b 0]
             g1.ActionIn[0] = new Quadruple.TapeActionIn()
             {
                 Read = false
@@ -375,7 +409,7 @@ public partial class ReversibleTuringMachine {
             g1.ActionIn[1] = new Quadruple.TapeActionIn()
             {
                 Read = true,
-                SymbolRead = t2.ActionOut[1].SymbolWritten
+                SymbolRead = t2.ActionOut[1].SymbolWritten // m
             };
             g1.ActionIn[2] = new Quadruple.TapeActionIn()
             {
@@ -383,23 +417,19 @@ public partial class ReversibleTuringMachine {
             };
             g1.ActionOut[0] = new Quadruple.TapeActionOut()
             {
-                Write = false,
                 Move = true,
                 MoveDirection = t2.ActionOut[0].MoveDirection.InverseDirection()
             };
-            g1.ActionOut[1] = new Quadruple.TapeActionOut()
-            {
+            g1.ActionOut[1] = new Quadruple.TapeActionOut() {
                 Write = true,
-                Move = false,
-                SymbolWritten = t2.ActionIn[1].SymbolRead
+                SymbolWritten = Tape.BlankSymbol
             };
-            g1.ActionOut[2] = new Quadruple.TapeActionOut()
-            {
-                Write = false,
+            g1.ActionOut[2] = new Quadruple.TapeActionOut() {
                 Move = true,
-                MoveDirection = t2.ActionOut[2].MoveDirection
+                MoveDirection = Direction.None
             };
 
+            // [ T' / / ] -> [ T -1 0 ]
             g2.ActionIn[0] = new Quadruple.TapeActionIn() 
             {
                 Read = true,
@@ -411,32 +441,27 @@ public partial class ReversibleTuringMachine {
             };
             g2.ActionIn[2] = new Quadruple.TapeActionIn() 
             {
-                Read = true,
-                SymbolRead = t1.ActionOut[2].SymbolWritten
+                Read = false,
             };
             g2.ActionOut[0] = new Quadruple.TapeActionOut() 
             {
                 Write = true,
                 SymbolWritten = t1.ActionIn[0].SymbolRead,
-                Move = false
             };
             g2.ActionOut[1] = new Quadruple.TapeActionOut()
             {
-                Write = false,
                 Move = true,
-                MoveDirection = t1.ActionOut[1].MoveDirection.InverseDirection()
+                MoveDirection = Direction.L
             };
             g2.ActionOut[2] = new Quadruple.TapeActionOut() 
             {
-                Write = true,
-                SymbolWritten = t1.ActionIn[2].SymbolRead,
-                Move = false
+                Move = true,
+                MoveDirection = Direction.None
             };  
 
 
             RetraceTransitions.Add(g1);
             RetraceTransitions.Add(g2);
-            c = cNew;
         }
     }
 }   

@@ -4,13 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ReversibleTuringMachine.Core; 
+namespace ReversibleTuringMachine.Core;
 public class Tape {
     public List<string> Cells { get; set; }
 
     public int HeadPosition { get; private set; } = 0;
 
-    public int TotalSize => Cells.Count;
+    public int TotalSize {
+        get {
+            int lastBlank = Cells.LastIndexOf(BlankSymbol);
+            if(lastBlank == -1) {
+                return Cells.Count;
+            } else {
+                return lastBlank;
+            }
+        }
+    }
 
     public const string BlankSymbol = "B";
     public const string LimitSymbol = "^";

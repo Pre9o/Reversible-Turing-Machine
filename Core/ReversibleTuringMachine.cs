@@ -139,6 +139,7 @@ public partial class ReversibleTuringMachine : TuringMachine {
     }
 
     public void RetraceStep() {
+        //this;
         Quadruple transition = FindTransition(RetraceTransitions) ?? throw new TuringException("No transition found");
         ApplyTransition(transition);
     }
