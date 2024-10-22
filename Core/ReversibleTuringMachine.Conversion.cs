@@ -115,10 +115,25 @@ public partial class ReversibleTuringMachine {
 
         // usa os alfabetos para criar transicoes de copia
         CopyTransitions = [];
+        int goingBackState = States.AddState();
         foreach(var symbol in tm.TapeAlphabet) {
-            if(symbol == "$") {
-                continue;
-            }
+            CopyTransitions.Add(new() {
+                StartState = FinalState,
+                EndState = goingBackState,
+                ActionIn = [
+                    new(){
+                        Read = false,
+                    },
+
+                ]
+            });
+            CopyTransitions.Add(new() {
+                StartState = goingBackState,
+                EndState = goingBackState,
+                ActionIn = [
+
+                ]
+            });
         }
     }
 }
