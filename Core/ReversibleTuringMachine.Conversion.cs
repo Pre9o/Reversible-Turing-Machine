@@ -209,7 +209,35 @@ public partial class ReversibleTuringMachine {
                     },
                     new(){
                         Write = false,
-                        Move = false
+                    },
+                    new(){
+                        Write = false,
+                    }
+                ]
+            });
+            CopyTransitions.Add(new()
+            {
+                StartState = goingBackState,
+                EndState = goingForwardState,
+                ActionIn = [
+                    new(){
+                        Read = true,
+                        SymbolRead = symbol 
+                    },
+                    new(){
+                        Read = false
+                    },
+                    new(){
+                        Read = false
+                    }
+                ],
+                ActionOut = [
+                    new(){
+                        Move = true,
+                        MoveDirection = Direction.R
+                    },
+                    new(){
+                        Write = false,
                     },
                     new(){
                         Write = true,
