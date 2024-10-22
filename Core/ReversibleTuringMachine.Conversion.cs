@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Intrinsics.Arm;
@@ -283,12 +284,32 @@ public partial class ReversibleTuringMachine {
         }
         
         int c = States.AddState();
+        int copyIntermed = States.AddState();
         CopyFinalState = c;
 
         // Adiciona transição final para o estado final
+        CopyTransitions.Add(new() {
+            StartState = goingForwardState,
+            EndState = copyIntermed,
+            ActionIn = [
+                new(){
+                    Read = false,
+                },
+                default,
+                default
+            ],
+            ActionOut = [
+                new(){
+                    Move = true,
+                    MoveDirection = Direction.R
+                },
+                default,
+                default
+            ]
+        });
         CopyTransitions.Add(new()
         {
-            StartState = goingForwardState,
+            StartState = copyIntermed,
             EndState = c,
             ActionIn = [
                 new(){
