@@ -65,7 +65,7 @@ public partial class ReversibleTuringMachine : TuringMachine {
         } else if (transition.ActionOut[0].Move) {
             InputTape.Move(transition.ActionOut[0].MoveDirection);
         } else {
-            throw new TuringException("Invalid action. Did not move nor write on input Tape");
+            //throw new TuringException("Invalid action. Did not move nor write on input Tape");
         }
 
         // fita history
@@ -74,7 +74,7 @@ public partial class ReversibleTuringMachine : TuringMachine {
         } else if (transition.ActionOut[1].Move) {
             HistoryTape.Move(transition.ActionOut[1].MoveDirection);
         } else {
-            throw new TuringException("Invalid action. Did not move nor write on history Tape");
+            //throw new TuringException("Invalid action. Did not move nor write on history Tape");
         }
 
         // fita output
@@ -83,7 +83,7 @@ public partial class ReversibleTuringMachine : TuringMachine {
         } else if (transition.ActionOut[2].Move) {
             OutputTape.Move(transition.ActionOut[2].MoveDirection);
         } else {
-            throw new TuringException("Invalid action. Did not move nor write on output Tape");
+            //throw new TuringException("Invalid action. Did not move nor write on output Tape");
         }
 
         CurrentState = transition.EndState;

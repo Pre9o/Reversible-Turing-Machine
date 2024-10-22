@@ -116,7 +116,6 @@ public partial class ReversibleTuringMachine {
         // usa os alfabetos para criar transicoes de copia
         CopyTransitions = [];
         int goingBackState = States.AddState();
-        int goingForwardState = States.AddState();
         foreach (var symbol in tm.TapeAlphabet)
         {
             CopyTransitions.Add(new()
@@ -137,7 +136,7 @@ public partial class ReversibleTuringMachine {
                 ],
                 ActionOut = [
                     new(){
-                        Write = true,
+                        Write = false,
                         SymbolWritten = symbol,
                         Move = true,
                         MoveDirection = Direction.L
@@ -171,7 +170,7 @@ public partial class ReversibleTuringMachine {
                 ],
                 ActionOut = [
                     new(){
-                        Write = true,
+                        Write = false,
                         SymbolWritten = symbol,
                         Move = true,
                         MoveDirection = Direction.L
@@ -219,16 +218,52 @@ public partial class ReversibleTuringMachine {
             });
         }
 
+        // Adiciona transição final para o estado final
+        CopyTransitions.Add(new()
+        {
+            StartState = goingBackState,
+            EndState = FinalState,
+            ActionIn = [
+                new(){
+                    Read = true,
+                    SymbolRead = Tape.BlankSymbol
+                },
+                new(){
+                    Read = false
+                },
+                new(){
+                    Read = false
+                }
+            ],
+            ActionOut = [
+                new(){
+                    Write = true,
+                    SymbolWritten = Tape.BlankSymbol, 
+                    Move = false
+                },
+                new(){
+                    Write = false,
+                    Move = false
+                },
+                new(){
+                    Write = false,
+                    Move = false
+                }
+            ]
+        });
+
 
         RetraceTransitions = [];
         // esse CF eh o ultimo estado do copy transitions
         int c = States.AddState();
-        if(ComputeTransitions.Count % 2 != 0) {
+        if (ComputeTransitions.Count % 2 != 0)
+        {
             throw new TuringException("Number of compute transitions is not even");
         }
-        for (int i = ComputeTransitions.Count - 1; i >= 0; i--) {
+        for (int i = ComputeTransitions.Count - 1; i > 0; i-=2)
+        {
             var t2 = ComputeTransitions[i];
-            var t1 = ComputeTransitions[i+1];
+            var t1 = ComputeTransitions[i - 1];
 
             int cTemp = States.AddState();
             int cNew = States.AddState();
@@ -245,35 +280,71 @@ public partial class ReversibleTuringMachine {
             g2.ActionOut = [default, default, default];
 
             // magia negra, inverte t1 e t2 em g1 e g2
-            g1.ActionIn[0] = new Quadruple.TapeActionIn() {
+            g1.ActionIn[0] = new Quadruple.TapeActionIn()
+            {
                 Read = false
             };
-            g1.ActionIn[1] = new Quadruple.TapeActionIn() {
+            g1.ActionIn[1] = new Quadruple.TapeActionIn()
+            {
                 Read = true,
                 SymbolRead = t2.ActionOut[1].SymbolWritten
             };
-            g1.ActionIn[2] = new Quadruple.TapeActionIn() {
+            g1.ActionIn[2] = new Quadruple.TapeActionIn()
+            {
                 Read = false
             };
-            g1.ActionOut[0] = new Quadruple.TapeActionOut() {
+            g1.ActionOut[0] = new Quadruple.TapeActionOut()
+            {
                 Write = false,
                 Move = true,
                 MoveDirection = t2.ActionOut[0].MoveDirection.InverseDirection()
             };
-            g1.ActionOut[1] = new Quadruple.TapeActionOut() {
+            g1.ActionOut[1] = new Quadruple.TapeActionOut()
+            {
                 Write = true,
                 Move = false,
                 SymbolWritten = t2.ActionIn[1].SymbolRead
             };
-            g1.ActionOut[2] = new Quadruple.TapeActionOut() {
+            g1.ActionOut[2] = new Quadruple.TapeActionOut()
+            {
                 Write = false,
                 Move = true,
                 MoveDirection = t2.ActionOut[2].MoveDirection
             };
+
+            g2.ActionIn[0] = new Quadruple.TapeActionIn() {
+                Read = true,
+                SymbolRead = t1.ActionOut[0].SymbolWritten
+            };
+            g2.ActionIn[1] = new Quadruple.TapeActionIn() {
+                Read = false
+            };
+            g2.ActionIn[2] = new Quadruple.TapeActionIn() {
+                Read = true,
+                SymbolRead = t1.ActionOut[2].SymbolWritten
+            };
+            g2.ActionOut[0] = new Quadruple.TapeActionOut() {
+                Write = true,
+                SymbolWritten = t1.ActionIn[0].SymbolRead,
+                Move = false
+            };
+            g2.ActionOut[1] = new Quadruple.TapeActionOut() {
+                Write = false,
+                Move = true,
+                MoveDirection = t1.ActionOut[1].MoveDirection.InverseDirection()
+            };
+            g2.ActionOut[2] = new Quadruple.TapeActionOut() {
+                Write = true,
+                SymbolWritten = t1.ActionIn[2].SymbolRead,
+                Move = false
+            };
+
 
             RetraceTransitions.Add(g1);
             RetraceTransitions.Add(g2);
             c = cNew;
         }
     }
-}
+}   
+
+
