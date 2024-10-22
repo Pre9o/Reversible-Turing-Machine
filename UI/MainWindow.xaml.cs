@@ -87,6 +87,11 @@ public partial class MainWindow : Window {
     }
 
     private void RenderTape(Tape tape, List<Emoji.Wpf.RichTextBox> boxList, ref int headPosition) {
+        int offset = 0;
+        if (tape.TotalSize > boxList.Count)
+        {
+            offset = tape.HeadPosition - boxList.Count + 1;
+        }
         for (int i = 0; i < boxList.Count; i++) {
             Emoji.Wpf.RichTextBox tb = boxList[i];
             if(i >= tape.TotalSize) {
@@ -94,12 +99,12 @@ public partial class MainWindow : Window {
                 StyleTapeBox(tb, false);
                 continue;
             }
-            tb.Text = tape.Cells[i] switch {
+            tb.Text = tape.Cells[i + offset] switch {
                 Tape.BlankSymbol => Blank,
                 Tape.LimitSymbol => Limit,
-                _ => tape.Cells[i],
+                _ => tape.Cells[i + offset],
             };
-            StyleTapeBox(tb, i == tape.HeadPosition);
+            StyleTapeBox(tb, i + offset == tape.HeadPosition);
         }
     }
 

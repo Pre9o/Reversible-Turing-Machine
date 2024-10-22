@@ -339,6 +339,7 @@ public partial class ReversibleTuringMachine {
             g1.EndState = cTemp;
             g1.ActionIn = [default, default, default];
             g1.ActionOut = [default, default, default];
+
             var g2 = new Quadruple();
             g2.StartState = cTemp;
             g2.EndState = cNew;
@@ -378,32 +379,38 @@ public partial class ReversibleTuringMachine {
                 MoveDirection = t2.ActionOut[2].MoveDirection
             };
 
-            g2.ActionIn[0] = new Quadruple.TapeActionIn() {
+            g2.ActionIn[0] = new Quadruple.TapeActionIn() 
+            {
                 Read = true,
                 SymbolRead = t1.ActionOut[0].SymbolWritten
             };
-            g2.ActionIn[1] = new Quadruple.TapeActionIn() {
+            g2.ActionIn[1] = new Quadruple.TapeActionIn() 
+            {
                 Read = false
             };
-            g2.ActionIn[2] = new Quadruple.TapeActionIn() {
+            g2.ActionIn[2] = new Quadruple.TapeActionIn() 
+            {
                 Read = true,
                 SymbolRead = t1.ActionOut[2].SymbolWritten
             };
-            g2.ActionOut[0] = new Quadruple.TapeActionOut() {
+            g2.ActionOut[0] = new Quadruple.TapeActionOut() 
+            {
                 Write = true,
                 SymbolWritten = t1.ActionIn[0].SymbolRead,
                 Move = false
             };
-            g2.ActionOut[1] = new Quadruple.TapeActionOut() {
+            g2.ActionOut[1] = new Quadruple.TapeActionOut()
+            {
                 Write = false,
                 Move = true,
                 MoveDirection = t1.ActionOut[1].MoveDirection.InverseDirection()
             };
-            g2.ActionOut[2] = new Quadruple.TapeActionOut() {
+            g2.ActionOut[2] = new Quadruple.TapeActionOut() 
+            {
                 Write = true,
                 SymbolWritten = t1.ActionIn[2].SymbolRead,
                 Move = false
-            };
+            };  
 
 
             RetraceTransitions.Add(g1);
