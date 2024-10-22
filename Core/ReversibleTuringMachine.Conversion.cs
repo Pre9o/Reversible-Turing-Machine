@@ -116,6 +116,7 @@ public partial class ReversibleTuringMachine {
         // usa os alfabetos para criar transicoes de copia
         CopyTransitions = [];
         int goingBackState = States.AddState();
+        int goingForwardState = States.AddState();
         foreach (var symbol in tm.TapeAlphabet)
         {
             CopyTransitions.Add(new()
