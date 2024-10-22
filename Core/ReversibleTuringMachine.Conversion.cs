@@ -135,5 +135,43 @@ public partial class ReversibleTuringMachine {
                 ]
             });
         }
+
+        RetraceTransitions = [];
+        // esse CF eh o ultimo estado do copy transitions
+        int c = States.AddState();
+        if(ComputeTransitions.Count % 2 != 0) {
+            throw new TuringException("Number of compute transitions is not even");
+        }
+        for (int i = ComputeTransitions.Count - 1; i >= 0; i--) {
+            var t2 = ComputeTransitions[i];
+            var t1 = ComputeTransitions[i+1];
+
+            int cTemp = States.AddState();
+            int cNew = States.AddState();
+
+            var g1 = new Quadruple();
+            g1.StartState = c;
+            g1.EndState = cTemp;
+            g1.ActionIn = [default, default, default];
+            g1.ActionOut = [default, default, default];
+            var g2 = new Quadruple();
+            g2.StartState = cTemp;
+            g2.EndState = cNew;
+            g2.ActionIn = [default, default, default];
+            g2.ActionOut = [default, default, default];
+
+            // magia negra, inverte t1 e t2 em g1 e g2
+            g1.ActionIn[0] = new Quadruple.TapeActionIn() {
+                Read = false
+            };
+            g1.ActionIn[1] = new Quadruple.TapeActionIn() {
+                Read = true,
+                SymbolRead = t2.ActionOut[1].SymbolWritten
+            };
+
+            RetraceTransitions.Add(g1);
+            RetraceTransitions.Add(g2);
+            c = cNew;
+        }
     }
 }
