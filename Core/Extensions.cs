@@ -12,4 +12,11 @@ public static class Extensions {
         stages.Add(newItem);
         return newItem;
     }
+
+    public static Direction InverseDirection(this Direction dir) => dir switch {
+        Direction.None => Direction.None,
+        Direction.L => Direction.R,
+        Direction.R => Direction.L,
+        _ => throw new NotImplementedException()
+    };
 }

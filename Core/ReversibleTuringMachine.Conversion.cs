@@ -116,25 +116,77 @@ public partial class ReversibleTuringMachine {
         // usa os alfabetos para criar transicoes de copia
         CopyTransitions = [];
         int goingBackState = States.AddState();
-        foreach(var symbol in tm.TapeAlphabet) {
-            CopyTransitions.Add(new() {
+        foreach (var symbol in tm.TapeAlphabet)
+        {
+            CopyTransitions.Add(new()
+            {
                 StartState = FinalState,
                 EndState = goingBackState,
                 ActionIn = [
                     new(){
-                        Read = false,
+                        Read = true,
+                        SymbolRead = symbol
                     },
-
+                    new(){
+                        Read = false
+                    },
+                    new(){
+                        Read = false
+                    }
+                ],
+                ActionOut = [
+                    new(){
+                        Write = true,
+                        SymbolWritten = symbol,
+                        Move = true,
+                        MoveDirection = Direction.L
+                    },
+                    new(){
+                        Write = false,
+                        Move = false
+                    },
+                    new(){
+                        Write = false,
+                        Move = false
+                    }
                 ]
             });
-            CopyTransitions.Add(new() {
+
+            CopyTransitions.Add(new()
+            {
                 StartState = goingBackState,
                 EndState = goingBackState,
                 ActionIn = [
-
+                    new(){
+                        Read = true,
+                        SymbolRead = symbol
+                    },
+                    new(){
+                        Read = false
+                    },
+                    new(){
+                        Read = false
+                    }
+                ],
+                ActionOut = [
+                    new(){
+                        Write = true,
+                        SymbolWritten = symbol,
+                        Move = true,
+                        MoveDirection = Direction.L
+                    },
+                    new(){
+                        Write = false,
+                        Move = false
+                    },
+                    new(){
+                        Write = false,
+                        Move = false
+                    }
                 ]
             });
         }
+
 
         RetraceTransitions = [];
         // esse CF eh o ultimo estado do copy transitions
@@ -167,6 +219,24 @@ public partial class ReversibleTuringMachine {
             g1.ActionIn[1] = new Quadruple.TapeActionIn() {
                 Read = true,
                 SymbolRead = t2.ActionOut[1].SymbolWritten
+            };
+            g1.ActionIn[2] = new Quadruple.TapeActionIn() {
+                Read = false
+            };
+            g1.ActionOut[0] = new Quadruple.TapeActionOut() {
+                Write = false,
+                Move = true,
+                MoveDirection = t2.ActionOut[0].MoveDirection.InverseDirection()
+            };
+            g1.ActionOut[1] = new Quadruple.TapeActionOut() {
+                Write = true,
+                Move = false,
+                SymbolWritten = t2.ActionIn[1].SymbolRead
+            };
+            g1.ActionOut[2] = new Quadruple.TapeActionOut() {
+                Write = false,
+                Move = true,
+                MoveDirection = t2.ActionOut[2].MoveDirection
             };
 
             RetraceTransitions.Add(g1);
