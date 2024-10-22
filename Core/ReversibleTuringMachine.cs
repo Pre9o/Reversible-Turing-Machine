@@ -139,7 +139,6 @@ public partial class ReversibleTuringMachine : TuringMachine {
     }
 
     public void RetraceStep() {
-        //this;
         Quadruple transition = FindTransition(RetraceTransitions) ?? throw new TuringException("No transition found");
         ApplyTransition(transition);
 
@@ -150,9 +149,9 @@ public partial class ReversibleTuringMachine : TuringMachine {
         transition.IsActive = true;
         lastTransitionTaken = transition;
 
-        if (CurrentState == CopyFinalState)
+        if (CurrentState == RetraceFinalState)
         {
-            executionState[Stage.Copy] = true;
+            executionState[Stage.Retrace] = true;
         }
     }
 

@@ -92,6 +92,9 @@ public partial class MainWindow : Window {
         {
             offset = tape.HeadPosition - boxList.Count + 1;
         }
+        if(offset < 0) {
+            offset = 0;
+        }
         for (int i = 0; i < boxList.Count; i++) {
             Emoji.Wpf.RichTextBox tb = boxList[i];
             if(i >= tape.TotalSize) {

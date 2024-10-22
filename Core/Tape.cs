@@ -10,16 +10,17 @@ public class Tape {
 
     public int HeadPosition { get; private set; } = 0;
 
-    public int TotalSize {
-        get {
-            int lastBlank = Cells.IndexOf(BlankSymbol);
-            if(lastBlank == -1) {
-                return Cells.Count;
-            } else {
-                return lastBlank;
-            }
-        }
-    }
+    public int TotalSize => Cells.Count;
+    //    {
+    //    get {
+    //        int lastBlank = Cells.IndexOf(BlankSymbol);
+    //        if(lastBlank == -1) {
+    //            return Cells.Count;
+    //        } else {
+    //            return lastBlank;
+    //        }
+    //    }
+    //}
 
     public const string BlankSymbol = "B";
     public const string LimitSymbol = "^";
