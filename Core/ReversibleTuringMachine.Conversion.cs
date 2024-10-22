@@ -239,9 +239,5 @@ public partial class ReversibleTuringMachine {
                 MoveDirection = t2.ActionOut[2].MoveDirection
             };
 
-            RetraceTransitions.Add(g1);
-            RetraceTransitions.Add(g2);
-            c = cNew;
-        }
     }
 }
