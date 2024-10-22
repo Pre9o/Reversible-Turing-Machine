@@ -215,10 +215,17 @@ public partial class ReversibleTuringMachine {
                     }
                 ]
             });
+            if (symbol == Tape.BlankSymbol)
+            {
+                continue;
+            }
+
+            int intermediateState = States.AddState();
+
             CopyTransitions.Add(new()
             {
-                StartState = goingBackState,
-                EndState = goingForwardState,
+                StartState = goingForwardState,
+                EndState = intermediateState,
                 ActionIn = [
                     new(){
                         Read = true,
@@ -245,13 +252,44 @@ public partial class ReversibleTuringMachine {
                     }
                 ]
             });
+
+            CopyTransitions.Add(new()
+            {
+                StartState = intermediateState,
+                EndState = goingForwardState,
+                ActionIn = [
+                    new(){
+                        Read = false
+                    },
+                    new(){
+                        Read = false
+                    },
+                    new(){
+                        Read = false
+                    }
+                ],
+                ActionOut = [
+                    new(){
+                    },
+                    new(){
+                        Write = false,
+                    },
+                    new(){
+                        Move = true,
+                        MoveDirection = Direction.R
+                    }
+                ]
+            });
         }
+        
+        int c = States.AddState();
+        CopyFinalState = c;
 
         // Adiciona transição final para o estado final
         CopyTransitions.Add(new()
         {
-            StartState = goingBackState,
-            EndState = FinalState,
+            StartState = goingForwardState,
+            EndState = c,
             ActionIn = [
                 new(){
                     Read = true,
@@ -284,7 +322,6 @@ public partial class ReversibleTuringMachine {
 
         RetraceTransitions = [];
         // esse CF eh o ultimo estado do copy transitions
-        int c = States.AddState();
         if (ComputeTransitions.Count % 2 != 0)
         {
             throw new TuringException("Number of compute transitions is not even");

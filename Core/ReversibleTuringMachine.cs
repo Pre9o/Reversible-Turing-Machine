@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +16,9 @@ public partial class ReversibleTuringMachine : TuringMachine {
     public List<Quadruple> ComputeTransitions { get; set; } = [];
     public List<Quadruple> CopyTransitions { get; set; } = [];
     public List<Quadruple> RetraceTransitions { get; set; }  = [];
+
+    public int CopyFinalState { get; protected set; } = -1;
+    public int RetraceFinalState { get; protected set; } = -1;
 
     private readonly Dictionary<Stage, bool> executionState = new() {
         { Stage.Compute, false},
@@ -120,6 +124,18 @@ public partial class ReversibleTuringMachine : TuringMachine {
         Quadruple transition = FindTransition(CopyTransitions) ?? throw new TuringException("No transition found");
         ApplyTransition(transition);
         // verifica se acabou. como?
+
+        if (lastTransitionTaken is not null)
+        {
+            lastTransitionTaken.IsActive = false;
+        }
+        transition.IsActive = true;
+        lastTransitionTaken = transition;
+
+        if (CurrentState == CopyFinalState)
+        {
+            executionState[Stage.Copy] = true;
+        }
     }
 
     public void RetraceStep() {
