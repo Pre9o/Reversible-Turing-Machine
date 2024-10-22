@@ -116,24 +116,110 @@ public partial class ReversibleTuringMachine {
         // usa os alfabetos para criar transicoes de copia
         CopyTransitions = [];
         int goingBackState = States.AddState();
-        foreach(var symbol in tm.TapeAlphabet) {
-            CopyTransitions.Add(new() {
+        foreach (var symbol in tm.TapeAlphabet)
+        {
+            CopyTransitions.Add(new()
+            {
                 StartState = FinalState,
                 EndState = goingBackState,
                 ActionIn = [
                     new(){
-                        Read = false,
+                        Read = true,
+                        SymbolRead = symbol
                     },
-
+                    new(){
+                        Read = false
+                    },
+                    new(){
+                        Read = false
+                    }
+                ],
+                ActionOut = [
+                    new(){
+                        Write = true,
+                        SymbolWritten = symbol,
+                        Move = true,
+                        MoveDirection = Direction.L
+                    },
+                    new(){
+                        Write = false,
+                        Move = false
+                    },
+                    new(){
+                        Write = false,
+                        Move = false
+                    }
                 ]
             });
-            CopyTransitions.Add(new() {
+
+            CopyTransitions.Add(new()
+            {
                 StartState = goingBackState,
                 EndState = goingBackState,
                 ActionIn = [
-
+                    new(){
+                        Read = true,
+                        SymbolRead = symbol
+                    },
+                    new(){
+                        Read = false
+                    },
+                    new(){
+                        Read = false
+                    }
+                ],
+                ActionOut = [
+                    new(){
+                        Write = true,
+                        SymbolWritten = symbol,
+                        Move = true,
+                        MoveDirection = Direction.L
+                    },
+                    new(){
+                        Write = false,
+                        Move = false
+                    },
+                    new(){
+                        Write = false,
+                        Move = false
+                    }
                 ]
             });
         }
+
+        // Adiciona transição final para o estado final
+        CopyTransitions.Add(new()
+        {
+            StartState = goingBackState,
+            EndState = FinalState,
+            ActionIn = [
+                new(){
+                    Read = true,
+                    SymbolRead = Tape.BlankSymbol
+                },
+                new(){
+                    Read = false
+                },
+                new(){
+                    Read = false
+                }
+            ],
+            ActionOut = [
+                new(){
+                    Write = true,
+                    SymbolWritten = Tape.BlankSymbol,
+                    Move = false
+                },
+                new(){
+                    Write = false,
+                    Move = false
+                },
+                new(){
+                    Write = false,
+                    Move = false
+                }
+            ]
+        });
     }
+
 }
